@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <th:block th:replace="/user/common/head.html"></th:block>
+</head>
+<body>    
+    <div class="ly_all bl_all">
+        <th:block th:replace="/user/common/header.html"></th:block>
+        <div class="bl_sideMenuBack">
+            <div class="ly_maxWD ly_flex">
+                <th:block th:replace="/user/customer/sideMenu.html"></th:block>
+                <div class="ly_inner02 ly_fgrow1 hp_fBack">
+                    <h2 class="el_lv1Head">리뷰작성</h2>
+                    <div class="bl_doneBox ly_midWD hp_mt50">
+                        <div class="bl_doneBox__wrap">
+                            <div class="bl_doneBox__txt">리뷰작성 글이 등록되었습니다. <br/>빠르게 답변드릴 수 있도록 노력하겠습니다.<br/>감사합니다.</div>
+                        </div>
+                        <a class="el_btnM hp_br5 el_btnPointBack hp_w100" href="/user/review/list">리뷰목록</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <th:block th:replace="/user/common/footer.html"></th:block>
+    </div>
+</body>
+</html>

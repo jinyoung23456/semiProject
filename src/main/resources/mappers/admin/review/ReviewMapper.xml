@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ohgiraffers.dosirak.admin.review.model.dao.ReviewMapper">
+
+    <resultMap id="generalReview" type="com.ohgiraffers.dosirak.admin.review.model.dto.ReviewDTO">
+        <id property="reviewCode" column="review_code"/>
+        <result property="reviewTitle" column="review_title"/>
+        <result property="reviewContent" column="review_content"/>
+        <result property="userId" column="user_id"/>
+        <result property="reviewEditDate" column="review_editdate"/>
+        <result property="reviewDelete" column="review_delete"/>
+        <result property="detailCode" column="detail_code"/>
+        <result property="reviewDate" column="review_date"/>
+        <association property="answerDTO" resultMap="generalAnswer"/>
+    </resultMap>
+
+    <resultMap id="generalAnswer" type="com.ohgiraffers.dosirak.admin.review.model.dto.AnswerDTO">
+        <id property="answerCode" column="answer_code"/>
+        <result property="answerStatus" column="answer_status"/>
+    </resultMap>
+
+    <select id="allReview" resultMap="generalReview">
+        SELECT
+            *,
+            b.answer_status
+        FROM
+            review a
+        LEFT JOIN
+            answer b ON (a.review_code = b.review_code)
+        ORDER BY
+            a.review_code DESC
+    </select>
+
+
+    <select id="searchAnswerDetail" resultType="com.ohgiraffers.dosirak.admin.review.model.dto.AnswerDTO">
+        SELECT
+        *
+        FROM
+        tbl_answer
+        WHERE
+        answer_code = #{answerCode}
+    </select>
+
+    <insert id="insertAnswer">
+        INSERT
+        INTO tbl_answer
+        (review_code, answer_content, admin_id)
+        VALUES
+        (#{ reviewCode }, #{ answerContent }, #{ adminId })
+    </insert>
+
+    <select id="getReviewInfo" resultType="com.ohgiraffers.dosirak.admin.review.model.dto.ReviewDTO">
+        SELECT
+        R.review_delete, R.review_code, R.review_content, R.user_id, R.detail_code, D.PRODUCT_CODE, P.PRODUCT_NAME, R.review_date , R.review_title,
+        A.answer_content, A.answer_date, A.answer_code, A.admin_id, A.answer_status
+        FROM
+        review R
+        JOIN
+        detail D USING (detail_code)
+        JOIN
+        tbl_product P USING (PRODUCT_CODE)
+        LEFT JOIN
+        answer A USING (review_code)
+        WHERE
+        review_code = #{ reviewCode }
+    </select>
+
+    <update id="reviewDelete">
+        UPDATE REVIEW
+        SET REVIEW_DELETE = 'Y'
+        WHERE review_code = #{ reviewCode }
+    </update>
+
+    <insert id="reviewAnswerRegist">
+        INSERT INTO ANSWER (ANSWER_STATUS, ANSWER_CONTENT, ANSWER_DATE, ADMIN_ID, REVIEW_CODE)
+        VALUE ( true , #{answerContent}, NOW(), #{adminId}, #{reviewCode})
+    </insert>
+</mapper>

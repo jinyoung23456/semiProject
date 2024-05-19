@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>회원가입</title>
+    <th:block th:replace="/user/common/head.html"></th:block>
+    <link rel="stylesheet" href="/user/css/join.css"/>
+</head>
+<body>
+    <div class="ly_all bl_all">
+        <th:block th:replace="/user/common/header.html"></th:block>
+        <div class="ly_midWD ly_inner02">
+            <h2 class="el_lv1Head">회원가입</h2>
+            <ol class="bl_joinStep ly_spaceBetween hp_mt50">
+                <li class="bl_joinStep__cont">약관동의</li>
+                <li class="bl_joinStep__cont">정보입력</li>
+                <li class="bl_joinStep__cont hp_active">가입완료</li>
+            </ol>
+            <div class="bl_doneBox hp_mt50">
+                <div class="bl_doneBox__wrap">
+                    <div class="bl_doneBox__txt">회원가입이 완료되었습니다.<br/>도시락 회원이 되신 것을 환영합니다.</div>
+                </div>
+                <a class="el_btnM hp_br5 el_btnPointBack hp_w100" href="/login">로그인</a>
+            </div>
+        </div>
+        <th:block th:replace="/user/common/footer.html"></th:block>
+    </div>
+</body>
+</html>

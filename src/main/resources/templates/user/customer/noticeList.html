@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>공지사항</title>
+    <th:block th:replace="/user/common/head.html"></th:block>
+</head>
+<body>
+<div>
+    <th:block th:replace="/user/common/header.html"></th:block>
+</div>
+<div class="ly_all bl_all">
+    <div class="bl_sideMenuBack">
+        <div class="ly_maxWD ly_flex">
+            <th:block th:replace="/user/customer/sideMenu.html"></th:block>
+            <div class="ly_inner02 ly_fgrow1 hp_fBack">
+                <div class="ly_midWDside ">
+                    <h2 class="el_lv1Head">공지사항</h2>
+                    <table class="bl_TBList hp_mt50">
+                        <caption class="WA">검색</caption>
+                        <colgroup>
+                            <col style="width:100px"/>
+                            <col style="width:*"/>
+                            <col style="width:150px"/>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th scope="col">번호</th>
+                            <th scope="col">제목</th>
+                            <th scope="col">작성일</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="notice : ${ noticeList }">
+                            <td th:text="${ notice.noticeCode }"></td>
+                            <td><a th:href="|noticeDetail?noticeCode=${ notice.noticeCode }|" th:text="${ notice.noticeTitle }"></a></td>
+                            <td th:text="${ notice.noticeDate }"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <!-- 페이징 바 -->
+                    <div id="paging" class="bl_paging hp_mt70" align="center" style="margin-top: 20px;">
+                        <th:block
+                                th:if="${ paging.searchCondition != null and paging.searchValue != null }">
+                            <!-- 맨 앞으로 이동 -->
+                            <button class="bl_pagingIcon__prev"
+                                    th:onclick="'location.href=\'/user/customer/noticeList=1&searchCondition=' + @{${paging.searchCondition}} + '&searchValue=' + @{${paging.searchValue}} + '\''"></button>
+
+                            <!-- 이전 페이지로 이동 -->
+                            <button class="bl_pagingIcon__prev"
+                                    th:onclick="'location.href=\/user/customer/noticeList=' + @{${paging.page - 1}} + '&searchCondition=' + @{${paging.searchCondition}} + '&searchValue=' + @{${paging.searchValue}} + '\''"
+                                    th:disabled="${ paging.page <= 1 }">&lt;</button>
+
+                            <!-- 숫자 버튼 -->
+                            <th:block
+                                    th:each="page : ${ #numbers.sequence(paging.startPage, paging.endPage)}">
+                                <button
+                                        th:onclick="'location.href=\'/user/customer/noticeList?page=' + @{${page}} + '&searchCondition=' + @{${paging.searchCondition}} + '&searchValue=' + @{${paging.searchValue}} + '\''"
+                                        th:text="${ page }" th:disabled="${ paging.page eq page }">
+                                </button>
+                            </th:block>
+
+                            <!-- 다음 페이지로 이동 -->
+                            <button
+                                    th:onclick="'location.href=\'/user/customer/noticeList?page=' + @{${paging.page + 1}} + '&searchCondition=' + @{${paging.searchCondition}} + '&searchValue=' + @{${paging.searchValue}} + '\''"
+                                    th:disabled="${ paging.page >= paging.maxPage }">></button>
+
+                            <!-- 맨 끝으로 이동 -->
+                            <button
+                                    th:onclick="'location.href=\'/user/customer/noticeList?page=' + @{${paging.maxPage}} + '&searchCondition=' + @{${paging.searchCondition}} + '&searchValue=' + @{${paging.searchValue}} + '\''">>></button>
+
+                        </th:block>
+                        <th:block
+                                th:if="${ paging.searchCondition == null  || paging.searchValue == null }">
+                            <!-- 맨 앞으로 이동 -->
+                            <button th:onclick="'location.href=\'/user/customer/noticeList?page=1\''">&lt;&lt;</button>
+
+                            <!-- 이전 페이지로 이동 -->
+                            <button
+                                    th:onclick="'location.href=\'/user/customer/noticeList?page=' + @{${paging.page - 1}} + '\''"
+                                    th:disabled="${ paging.page <= 1 }">&lt;</button>
+
+                            <!-- 숫자 버튼 -->
+                            <th:block
+                                    th:each="page : ${ #numbers.sequence(paging.startPage, paging.endPage)}">
+                                <button
+                                        th:onclick="'location.href=\'/user/customer/noticeList?page=' + @{${page}} + '\''"
+                                        th:text="${ page }" th:disabled="${ paging.page eq page }">
+                                </button>
+                            </th:block>
+
+                            <!-- 다음 페이지로 이동 -->
+                            <button
+                                    th:onclick="'location.href=\'/user/customer/noticeList?page=' + @{${paging.page + 1}} + '\''"
+                                    th:disabled="${ paging.page >= paging.maxPage }">></button>
+
+                            <!-- 맨 끝으로 이동 -->
+                            <button
+                                    th:onclick="'location.href=\'/user/customer/noticeList?page=' + @{${paging.maxPage}} + '\''">>></button>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<th:block th:replace="/user/common/footer.html"></th:block>
+</div>
+</body>
+</html>

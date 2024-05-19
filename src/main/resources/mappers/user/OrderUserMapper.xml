@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ohgiraffers.dosirak.user.order.model.dao.OrderUserMapper">
+    <resultMap id="productOrder" type="com.ohgiraffers.dosirak.user.order.model.dto.OrderDTO">
+        <id property="productName" column="PRODUCT_NAME"/>
+        <result property="productCode" column="PRODUCT_CODE"/>
+        <result property="productPrice" column="PRODUCT_PRICE"/>
+        <result property="productStatus" column="PRODUCT_STATUS"/>
+        <result property="productCategoryCode" column="PRODUCT_CATEGORY_CODE"/>
+        <result property="productSummary" column="product_summary"/>
+    </resultMap>
+    <resultMap id="orderHistoryResultMap" type="com.ohgiraffers.dosirak.user.order.model.dto.OrderHistoryDTO">
+        <result property="orderCode" column="ORDER_CODE"/>
+        <result property="orderStatus" column="ORDER_STATUS"/>
+        <result property="orderRecipient" column="ORDER_RECIPIENT"/>
+        <result property="orderContact" column="ORDER_CONTACT"/>
+        <result property="orderAddress1" column="ORDER_ADDRESS1"/>
+        <result property="orderAddress2" column="ORDER_ADDRESS2"/>
+        <result property="orderAddress3" column="ORDER_ADDRESS3"/>
+        <result property="payPrice" column="PAY_PRICE"/>
+        <result property="payDate" column="PAY_DATE"/>
+        <result property="payStatus" column="PAY_STATUS"/>
+        <result property="payMethod" column="PAY_METHOD"/>
+        <result property="deliveryCode" column="DELIVERY_CODE"/>
+        <result property="deliveryStatus" column="DELIVERY_STATUS"/>
+        <result property="detailCode" column="DETAIL_CODE"/>
+        <result property="detailStatus" column="DETAIL_STATUS"/>
+        <result property="detailItemCount" column="DETAILITEM_COUNT"/>
+        <result property="productName" column="PRODUCT_NAME"/>
+        <result property="productPrice" column="product_price"/>
+        <result property="firstImageName" column="FIRST_IMAGE_NAME"/>
+        <result property="firstImagePath" column="FIRST_IMAGE_PATH"/>
+    </resultMap>
+
+    <select id="orderCall" resultMap="productOrder">
+        SELECT *
+        FROM tbl_product;
+    </select>
+    <select id="findOrderHistoryByUserId" resultMap="orderHistoryResultMap">
+        SELECT
+        o.ORDER_CODE,
+        o.ORDER_STATUS,
+        o.ORDER_RECIPIENT,
+        o.ORDER_CONTACT,
+        o.ORDER_ADDRESS1,
+        o.ORDER_ADDRESS2,
+        o.ORDER_ADDRESS3,
+        p.PAY_PRICE,
+        p.PAY_DATE,
+        p.PAY_STATUS,
+        p.PAY_METHOD,
+        d.DELIVERY_CODE,
+        d.DELIVERY_STATUS,
+        dt.DETAIL_CODE,
+        dt.DETAIL_STATUS,
+        dt.DETAILITEM_COUNT,
+        tp.PRODUCT_NAME,
+        tp.product_price,
+        (
+        SELECT SAVED_NAME
+        FROM PRODUCT_IMG
+        WHERE PRODUCT_CODE = tp.PRODUCT_CODE
+        ORDER BY IMG_CODE
+        LIMIT 1
+        ) AS FIRST_IMAGE_NAME,
+        (
+        SELECT SAVE_PATH
+        FROM PRODUCT_IMG
+        WHERE PRODUCT_CODE = tp.PRODUCT_CODE
+        ORDER BY IMG_CODE
+        LIMIT 1
+        ) AS FIRST_IMAGE_PATH
+        FROM
+        `ORDER` o
+        JOIN PAY p ON o.ORDER_CODE = p.ORDER_CODE
+        JOIN DELIVERY d ON o.ORDER_CODE = d.ORDER_CODE
+        JOIN DETAIL dt ON o.ORDER_CODE = dt.ORDER_CODE
+        LEFT JOIN tbl_product tp ON dt.DETAILITEM_PRODUCT_CODE = tp.PRODUCT_CODE
+        WHERE
+        o.ID = #{userId}
+        ORDER BY
+        o.ORDER_CODE DESC;
+    </select>
+
+
+</mapper>

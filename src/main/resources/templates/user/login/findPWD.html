@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>비밀번호찾기</title>
+    <th:block th:replace="/user/common/head.html"></th:block>
+    <link rel="stylesheet" href="/user/css/join.css"/>
+    <script type="text/javascript" src="/user/js/condition.js"></script>
+</head>
+<body>
+<div class="ly_all bl_all">
+    <th:block th:replace="/user/common/header.html"></th:block>
+    <div class="ly_midWD ly_inner02">
+        <h2 class="el_lv1Head">비밀번호 찾기</h2>
+        <div class="hp_bordDE hp_padding70 hp_mt50">
+            <form action="/user/login/findPWDreset" method="post">
+                <div class="tr_up">
+                    <input type="text" onkeyup="noSpace(this)" id="name" class="el_btnM hp_inputBack hp_w100" name="name" placeholder="이름를 입력해주세요" title="이름 입력" required/>
+                    <input type="text" onkeyup="noSpace(this)" id="id" class="el_btnM hp_inputBack hp_w100 hp_mt10" name="id" placeholder="아이디를 입력해주세요" title="아이디 입력" required/>
+                    <input type="text" onkeyup="noSpace(this)" id="inputEmail" class="el_btnM hp_inputBack hp_w100 hp_mt10" name="email" placeholder="이메일을 입력해주세요" title="이메일 입력" required/>
+                    <input type="hidden" th:value="${resultNum}" id="hiddenCode" name="hiddenCode"/>
+                    <button type="button" onclick="sendCode()" class="el_sendCode el_btnM el_btnPointBack hp_w100 hp_br5 hp_mt40" disabled>인증번호 요청</button>
+                </div>
+                <div class="tr_none hp_bordDashTDE2 hp_mt50 hp_pt50">
+                    <div class="ly_flex">
+                        <input type="text" id="inputCode" class="el_btnM hp_inputBack hp_w100" placeholder="인증번호를 입력해주세요" title="인증번호 입력"/>
+                        <input type="button" onclick="verifyCode()" class="el_btnM el_btnPointBord hp_ml10" value="인증확인"/>
+                        <input type="hidden" id="verifyVerificationCode" value=""/>
+                    </div>
+                    <button type="submit" class="el_findPWDbtn el_btnM el_btnPointBack hp_w100 hp_br5 hp_mt40" disabled>비밀번호 재설정</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <th:block th:replace="/user/common/footer.html"></th:block>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+<script>
+    $(function(){
+        $(".tr_up input").change(function (){
+            // 입력이 바뀔때마다 초기화
+            $(".tr_none").hide();
+            $(".el_sendCode").attr("disabled", true);
+            let isTrue = true;
+
+            // 모든 input 값이 입력되었는지 확인
+            for(let i=0; i<$("input[required]").length; i++){
+                let thisVal = $("input[required]").eq(i).val();
+                if(thisVal == "") {
+                    isTrue = false;
+                    return false;
+                }
+            }
+
+            // 모두 확인되었을 때 인증번호 요청 버튼 활성화
+            if(isTrue) $(".el_sendCode").removeAttr("disabled");
+        })
+
+        $(".el_sendCode").click(function (){
+            $(".tr_none").show();
+        })
+
+        let passAlert = window.alert;
+        window.alert = function (){
+            passAlert.apply(this, arguments);
+            if(arguments[0] === "인증되었습니다."){
+                console.log(123);
+                $(".el_findPWDbtn").removeAttr("disabled");
+            }
+        }
+    })
+</script>
+</body>
+</html>

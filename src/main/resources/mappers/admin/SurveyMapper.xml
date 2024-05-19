@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ohgiraffers.dosirak.admin.survey.model.dao.SurveyAdminDAO">
+    <resultMap id="SurveyQuestionMap" type="com.ohgiraffers.dosirak.admin.survey.model.dto.SurveyQuestionDTO">
+        <id property="questionId" column="question_id"/>
+        <result property="versionId" column="version_id"/>
+        <result property="questionOrder" column="question_order"/>
+        <result property="questionText" column="question_text"/>
+        <result property="questionCategory" column="question_category"/>
+        <collection property="answerList" resultMap="answerMap"/>
+    </resultMap>
+    <resultMap id="answerMap" type="com.ohgiraffers.dosirak.admin.survey.model.dto.SurveyAnswerDTO">
+        <id property="answerId" column="answer_id"/>
+        <result property="questionId" column="question_id"/>
+        <result property="answerText" column="answer_text"/>
+        <result property="answerValue" column="answer_value"/>
+    </resultMap>
+
+
+    <select id="allList" resultType="com.ohgiraffers.dosirak.admin.survey.model.dto.SurveyResultDTO">
+        SELECT *
+        FROM SURVEY_RESULT
+    </select>
+    <select id="getVersionByVersionId">
+        SELECT *
+        FROM SURVEY_VERSION
+        WHERE VERSION_ID = #{versionId}
+    </select>
+    <select id="getAllVersion">
+        SELECT *
+        FROM SURVEY_VERSION
+    </select>
+    <select id="getQuestionListByVersionId" resultMap="SurveyQuestionMap">
+        SELECT * FROM SURVEY_QUESTION q
+        LEFT JOIN SURVEY_ANSWER a
+        ON q.QUESTION_ID = a.QUESTION_ID
+        WHERE q.version_id = #{versionId}
+    </select>
+    <select id="getRangeListByVersionId">
+        SELECT
+        category,
+        range1,
+        range2,
+        range3,
+        range4,
+        (SELECT SUM(answer_value)
+        FROM SURVEY_QUESTION q
+        LEFT JOIN SURVEY_ANSWER a ON q.QUESTION_ID = a.QUESTION_ID
+        WHERE q.version_id = #{versionId} AND q.question_category = category
+        GROUP BY q.question_category) AS max_point
+        FROM SURVEY_RANGE
+        WHERE version_id = #{versionId}
+        ORDER BY category,
+        CASE
+        WHEN category = 'C' THEN 1
+        WHEN category = 'P' THEN 2
+        WHEN category = 'F' THEN 3
+        WHEN category = 'W' THEN 4
+        ELSE 5
+        END;
+    </select>
+    <delete id="getDeleteAnswerByVersionId">
+        DELETE FROM SURVEY_ANSWER WHERE QUESTION_ID in
+        (SELECT QUESTION_ID FROM SURVEY_QUESTION WHERE VERSION_ID = #{versionId})
+    </delete>
+    <delete id="deleteQuestionByVersionId">
+        DELETE FROM SURVEY_QUESTION WHERE VERSION_ID = #{versionId}
+    </delete>
+    <delete id="deleteRangeByVersionId">
+        DELETE FROM SURVEY_RANGE WHERE VERSION_ID = #{versionId}
+    </delete>
+    <delete id="deleteVersionByVersionId">
+        DELETE FROM SURVEY_VERSION WHERE VERSION_ID = #{versionId}
+    </delete>
+    <select id="getSurveyRangeByVersionId">
+        SELECT R.version_id, R.category, R.range1,
+        R.range2, R.range3, R.range4
+        FROM SURVEY_RANGE R
+        JOIN SURVEY_VERSION V ON R.version_id = V.version_id
+        WHERE V.status = #{versionId}
+        ORDER BY CASE
+        WHEN R.category = 'C' THEN 1
+        WHEN R.category = 'P' THEN 2
+        WHEN R.category = 'F' THEN 3
+        WHEN R.category = 'W' THEN 4
+        END
+    </select>
+    <update id="updateVersionByVersionDTO">
+        UPDATE SURVEY_VERSION
+        SET VERSION_NAME = #{versionName},
+            VERSION_EXPLAIN = #{versionExplain}
+        WHERE VERSION_ID = #{versionId}
+    </update>
+    <update id="updateQuestionBySurveyQuestionDTO">
+        UPDATE SURVEY_QUESTION
+        SET QUESTION_TEXT = #{questionText},
+            QUESTION_CATEGORY = #{questionCategory}
+        WHERE VERSION_ID = #{versionId}
+            AND QUESTION_ORDER = #{questionOrder}
+    </update>
+    <select id="getQuestionIdByQuestionDTO" resultType="int">
+    SELECT question_id
+    FROM SURVEY_QUESTION
+    WHERE QUESTION_ORDER = #{questionOrder}
+    AND VERSION_ID = #{versionId}
+    </select>
+    <insert id="insertQuestion">
+        INSERT INTO
+    </insert>
+    <update id="updateAnswerBySurveyAnswerDTO">
+        UPDATE SURVEY_ANSWER
+        SET ANSWER_TEXT = #{answerText},
+            ANSWER_VALUE = #{answerValue}
+        WHERE ANSWER_ID = #{answerId}
+    </update>
+    <delete id="deleteAllAnswerByAnswer">
+        DELETE SURVEY_ANSWER FROM QUESTION_ID = #{questionId}
+    </delete>
+    <insert id="insertNetVersion">
+        INSERT INTO SURVEY_VERSION
+        (VERSION_NAME, VERSION_EXPLAIN, UPDATE_DATE, STATUS)
+        VALUES
+        ('새로운 설문', '새로 만들어진 설문입니다.', NOW(), 0)
+    </insert>
+    <select id="getVersionId">
+        SELECT *
+        FROM SURVEY_VERSION
+        ORDER BY VERSION_ID DESC
+        LIMIT 1
+    </select>
+    <insert id="insertAnswerBySurveyAnswerDTO">
+        INSERT INTO SURVEY_ANSWER (QUESTION_ID, ANSWER_TEXT, ANSWER_VALUE)
+        VALUES (#{questionId}, #{answerText} #{answerValue})
+    </insert>
+</mapper>

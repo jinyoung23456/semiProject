@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <th:block th:replace="/admin/common/head.html"></th:block>
+    <link href="/admin/css/datatable.css" rel="stylesheet">
+    <script defer src="/admin/js/survey/surveyQuestionTable.js"></script>
+</head>
+
+<body class="sb-nav-fixed">
+<th:block th:replace="/admin/common/header.html"></th:block>
+<div id="layoutSidenav">
+    <th:block th:replace="/admin/common/sideNav.html"></th:block>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4" th:text="|version.${version.versionId}|"></h1>
+                <form id="versionSet">
+                    <table class="datatable-table mt-4">
+                        <input style="display: none" th:value="${version.versionId}" name="versionId">
+                        <tr>
+                            <th scope="row" style="width: 10%">버전 별칭</th>
+                            <td style="width: 15%"><input th:value="${version.versionName}" name="versionName">
+                            </td>
+                            <th scope="row" style="width: 10%">한줄 설명</th>
+                            <td><input style="width: 70%" th:value="${version.versionExplain}"
+                                       name="versionExplain"></td>
+                        </tr>
+                    </table>
+                </form>
+                <button id="insertQuestion">질문 추가하기</button>
+
+                <table class="datatable">
+                    <thead>
+                    <tr>
+                        <th style="width: 10%" class="orderText">질문 번호</th>
+                        <th style="width: 10%">영양소/점수</th>
+                        <th>질문/답변 내용</th>
+                    </tr>
+                    </thead>
+
+                </table>
+                <div id="orderDiv">
+
+                </div>
+            </div>
+            <div class="editBtn" style="text-align: right;">
+                <span>
+                    <button type="button" class="btn btn-primary" id="modify">설문 수정</button>
+                    <button type="button" class="btn btn-primary" formaction="/admin/suit-box/menu/view"
+                            formmethod="get">설문 삭제</button>
+                    <button type="button" class="btn btn-secondary"
+                            onclick="window.location.href='/admin/survey/version-list'">목록</button>
+                </span>
+            </div>
+        </main>
+    </div>
+</div>
+<th:block th:replace="/admin/common/foot.html"></th:block>
+<script>
+    const versionId = [[${version.versionId}]]
+
+    const $insertQuestionButton = document.querySelector('#insertQuestion') // 질문 추가 버튼
+    const $modifyButton = document.querySelector('#modify') // 수정 버튼
+    $modifyButton.addEventListener('click', modify)
+
+
+    const $thQuestionList = document.querySelectorAll('.question')
+    $thQuestionList.forEach(() => {
+    })
+    setQuestionOrderAndForm(); // text, orderInput value 할당
+
+    const $insertQuestion = document.querySelector('#insertQuestion')
+    $insertQuestion.addEventListener('click', () => {
+        const $orderDiv = document.querySelector('#orderDiv')
+        $orderDiv.innerHTML += `<div class="questionDiv">
+                        <form class="question">
+                            <input style="display: none" name="questionOrder" class="questionOrder">
+                            <input style="display: none" name="versionId" value="${versionId}">
+                            <table class="datatable">
+                                <tr>
+                                    <td class="orderText"
+                                        style="width: 10%">1
+                                    </td>
+                                    <td style="width: 10%">
+                                        <select name="questionCategory">
+                                            <option value="C">
+                                                탄수화물
+                                            </option>
+                                            <option value="P">
+                                                단백질
+                                            </option>
+                                            <option value="F">지방
+                                            </option>
+                                            <option value="W">운동
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td style="border-right: none">
+                                        <input name="questionText"
+                                               style="width: 700px">
+                                    </td>
+                                    <td style="border-left: none; width: 800px;">
+                                        <button type="button" style="margin-left: 20px"
+                                                class="insertAnswerButton"
+                                                onclick="insertAnswer(event)">답변 추가
+                                        </button>
+                                        <button type="button" style="margin-left: 20px" onclick="deleteQuestion(event)"
+                                                class="deleteQuestionButton">질문 삭제
+                                        </button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                        <div>
+                            <form class="answer">
+                                <input style="display: none" name="questionOrder">
+                                <table class="datatable">
+                                    <tr>
+                                        <td style="width: 10%"></td>
+                                        <td style="width: 10%"><input name="answerValue" style="width: 50px;"></td>
+                                        <td style="border-right: none"><input name="answerText" style="width: 500px;">
+                                        </td>
+                                        <td style="border-left: none; width: 800px;">
+                                            <button type="button" onclick="deleteAnswer(event)"
+                                                    style="margin-left: 20px" class="deleteAnswer">답변 삭제
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </form>
+                        </div>
+                    </div>`
+        //innerText
+        setQuestionOrderAndForm()
+    })
+
+    function setQuestionOrderAndForm() {
+        const $questionDivList = document.querySelectorAll('.questionDiv')
+        let order = 1;
+        $questionDivList.forEach($div => {
+            const text = $div.querySelector('.orderText')
+            const questionOrder = $div.querySelector('.questionOrder')
+            text.textContent = order;
+            questionOrder.value = order
+            order++
+        })
+    }
+
+    function insertAnswer(event) {
+        const $div = event.target.parentElement.parentElement.parentElement.parentElement.parentElement.nextElementSibling
+        if ($div.querySelectorAll('form').length < 5) {
+            $div.innerHTML += `<form class="answer">
+                            <table class="datatable">
+                                <tr>
+                                    <td style="width: 10%"></td>
+                                    <td style="width: 10%"><input name="answerValue" style="width: 50px;"></td>
+                                    <td style="border-right: none"><input name="answerText" style="width: 500px;"></td>
+                                    <td style="border-left: none; width: 800px;">
+                                        <button type="button" onclick="deleteAnswer(event)"
+                                                style="margin-left: 20px" class="deleteAnswer">답변 삭제
+                                        </button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>`
+        }   // form 태그가 5개 미만일 때 만 innerHtml 사용하여 증가
+    }
+
+    function deleteAnswer(event) {
+        const $tableRow = event.target.parentElement.parentElement.parentElement.parentElement.parentElement
+        if ($tableRow.parentElement.querySelectorAll('form').length != 1) {
+            $tableRow.remove();
+        }
+    }
+
+    function deleteQuestion(event) {
+        event.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.remove()   // questionDiv 제거
+        setQuestionOrderAndForm()
+    }
+    async function modify(){
+        const $questionDivList = document.querySelectorAll('.questionDiv')
+        const $versionSet = document.querySelector('#versionSet')
+        let response = await fetch('/admin/survey/fetch/version',{
+            method: 'POST',
+            body: new FormData($versionSet)
+        })
+        let responseJson = await response.json()
+        for (const $questionDiv of $questionDivList) {
+            const question = $questionDiv.querySelector('.question')
+            const answerLIst = $questionDiv.querySelectorAll('.answer')
+            response = await fetch('/admin/survey/fetch/question',{
+                method: 'POST',
+                body: new FormData(question)
+            })
+            responseJson = await response.json()    // 방금 인서트한 questionId
+            for(const answer of answerLIst){
+                response = await fetch('/admin/survey/fetch/answer',{
+                    method: 'POST',
+                    body: new FormData(answer).append('questionId', responseJson)
+                })
+            }
+        }
+    }
+
+    function lengthTest(){
+        const $questionDivList = document.querySelectorAll('.questionDiv')
+        console.log($questionDivList)
+    }
+
+
+</script>
+</body>
+
+</html>

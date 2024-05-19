@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ohgiraffers.dosirak.user.login.model.dao.UserLoginMapper">
+    <resultMap id="login" type="com.ohgiraffers.dosirak.user.login.model.dto.LoginDTO">
+        <id property="id" column="ID"/>
+        <result property="name" column="NAME"/>
+        <result property="pwd" column="PWD"/>
+        <result property="authority" column="AUTHORITY"/>
+        <result property="role" column="ROLE"/>
+    </resultMap>
+    <select id="findById" resultMap="login">
+        SELECT ID, NAME, PWD, AUTHORITY, ROLE FROM ADMIN WHERE ID = #{id} AND WITHDRAWAL = FALSE
+        UNION
+        SELECT ID, NAME, PWD, PHONE, ROLE FROM USER WHERE ID = #{id} AND WITHDRAWAL = FALSE
+    </select>
+
+
+    <resultMap id="member" type="com.ohgiraffers.dosirak.admin.member.model.dto.MemberDTO">
+        <id property="id" column="ID"/>
+        <result property="name" column="NAME"/>
+        <result property="birth" column="BIRTH"/>
+        <result property="gender" column="GENDER"/>
+        <result property="phone" column="PHONE"/>
+        <result property="email" column="EMAIL"/>
+        <result property="address1" column="ADDRESS1"/>
+        <result property="address2" column="ADDRESS2"/>
+        <result property="address3" column="ADDRESS3"/>
+        <result property="agree" column="AGREE"/>
+        <result property="pwd" column="PWD"/>
+        <result property="joindate" column="JOINDATE"/>
+        <result property="withdrawal" column="WITHDRAWAL"/>
+        <result property="role" column="ROLE"/>
+    </resultMap>
+    <select id="findIDform" resultMap="member">
+        SELECT ID, NAME, JOINDATE FROM ADMIN WHERE NAME = #{name} AND EMAIL = #{email} AND WITHDRAWAL = FALSE
+        UNION
+        SELECT ID, NAME, JOINDATE FROM USER WHERE NAME = #{name} AND EMAIL = #{email} AND WITHDRAWAL = FALSE
+    </select>
+    <select id="findPWDform" resultMap="member">
+        SELECT ID, NAME, JOINDATE, ROLE FROM ADMIN WHERE NAME = #{name} AND ID = #{id} AND EMAIL = #{email} AND WITHDRAWAL = FALSE
+        UNION
+        SELECT ID, NAME, JOINDATE, ROLE FROM USER WHERE NAME = #{name} AND ID = #{id} AND EMAIL = #{email} AND WITHDRAWAL = FALSE
+    </select>
+    <update id="pwdResetAdmin">
+        UPDATE ADMIN SET PWD = #{encodePwd} WHERE ID = #{id}
+    </update>
+    <update id="pwdResetUser">
+        UPDATE USER SET PWD = #{encodePwd} WHERE ID = #{id}
+    </update>
+</mapper>

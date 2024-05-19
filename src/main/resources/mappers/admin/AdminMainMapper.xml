@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ohgiraffers.dosirak.admin.controller.model.dao.AdminMainMapper">
+    <select id="joinCount" resultType="java.util.Map">
+        SELECT COUNT(*) AS COUNT, JOINDATE FROM USER
+        WHERE JOINDATE BETWEEN DATE_SUB(CURDATE(), INTERVAL 7 DAY) AND CURDATE()
+        GROUP BY JOINDATE ORDER BY JOINDATE
+    </select>
+    <select id="joinNum" resultType="int">
+        SELECT COUNT(*) AS JOINNUM FROM USER
+        WHERE CURDATE() >= JOINDATE
+    </select>
+</mapper>

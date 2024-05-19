@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>공지사항</title>
+    <th:block th:replace="/user/common/head.html"></th:block>
+</head>
+<body>
+<th:block th:replace="/user/common/header.html"></th:block>
+<div class="ly_all bl_all">
+    <div class="bl_sideMenuBack">
+        <div class="ly_maxWD ly_flex">
+            <th:block th:replace="/user/customer/sideMenu.html"></th:block>
+            <div class="ly_inner02 ly_fgrow1 hp_fBack">
+                <div class="ly_midWDside">
+                    <h2 class="el_lv1Head">공지사항</h2>
+                    <table class="bl_TBView hp_mt50">
+                        <colgroup>
+                            <col style="width:150px" />
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row">제목</th>
+                            <td th:text="${ notice.noticeTitle }"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">내용</th>
+                            <td>
+                                <pre th:text="${ notice.noticeContent }"></pre>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <ul class="ly_flexC hp_mt70">
+                        <li>
+                            <button type="button" class="el_btnM hp_br5 el_btnPointBack" onclick="location.href='/user/customer/noticeList'">목록</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <th:block th:replace="/user/common/footer.html"></th:block>
+</div>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <th:block th:replace="/admin/common/head.html"></th:block>
+</head>
+<body class="sb-nav-fixed">
+<th:block th:replace="/admin/common/header.html"></th:block>
+<div id="layoutSidenav">
+    <th:block th:replace="/admin/common/sideNav.html"></th:block>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">맞춤도시락 등록</h1>
+                <form action="/admin/suit-box/menu/set-menu" method="post">
+                    <table class="datatable-table mt-4">
+                        <colgroup>
+                            <col style="width:200px"/>
+                            <col/>
+                            <col style="width:200px"/>
+                            <col/>
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row"><label for="menuName">메뉴이름</label></th>
+                            <td colspan="2"><input id="menuName" type="text" name="menuName" th:value="${menu?.menuName}" /></td>
+                            <th scope="row"><label for="extraCash">추가금</label></th>
+                            <td colspan="2"><input id="extraCash" type="number" name="menuExtracash" th:value="${menu?.menuExtracash}" /></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="menuCategory">메뉴분류</label></th>
+                            <td colspan="2">
+                                <select id="menuCategory" class="datatable-selector" name="menuCategory" th:value="${menu?.menuCategory}">
+                                    <option value="rice">밥</option>
+                                    <option value="main">메인</option>
+                                    <option value="side">서브</option>
+                                    <option value="kimchi">김치</option>
+                                </select>
+                            </td>
+                            <th scope="row"><label for="menuStatus">판매상태</label></th>
+                            <td colspan="2">
+                                <select id="menuStatus" class="datatable-selector" name="menuStatus" th:value="${menu?.menuStatus}">
+                                    <option value="Y">판매 가능</option>
+                                    <option value="S">일시 중단</option>
+                                    <option value="N">판매 중단</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="carbo">탄수화물</label></th>
+                            <td><input id="carbo" type="number" name="menuCarbo" th:value="${menu?.menuCarbo}" /></td>
+                            <th scope="row"><label for="sugar">당류</label></th>
+                            <td><input id="sugar" type="number" name="menuSugar" th:value="${menu?.menuSugar}" /></td>
+                            <th scope="row"><label for="protein">단백질</label></th>
+                            <td><input id="protein" type="number" name="menuProtein" th:value="${menu?.menuProtein}" /></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="fat">지방</label></th>
+                            <td><input id="fat" type="number" name="menuFat" th:value="${menu?.menuFat}" /></td>
+                            <th scope="row"><label for="saturateFat">포화지방</label></th>
+                            <td><input id="saturateFat" type="number" name="menuSaturatedFat" th:value="${menu?.menuSaturatedFat}" /></td>
+                            <th scope="row"><label for="transFat">트랜스지방</label></th>
+                            <td><input id="transFat" type="number" name="menuTransFat" th:value="${menu?.menuTransFat}" /></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="cholesterol">콜레스테롤</label></th>
+                            <td><input id="cholesterol" type="number" name="menuCholesterol" th:value="${menu?.menuCholesterol}" /></td>
+                            <th scope="row"><label for="natrium">나트륨</label></th>
+                            <td><input id="natrium" type="number" name="menuNatrium" th:value="${menu?.menuNatrium}" /></td>
+                            <th scope="row"><label for="calory">칼로리</label></th>
+                            <td><input id="calory" type="number" name="menuCalory" th:value="${menu?.menuCalory}" /></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="editBtn" style="text-align: right;">
+                        <th:block th:switch="${setCondition}">
+                            <span th:case="regist">
+                                <button type="submit" class="btn btn-primary">등록</button>
+                                <button type="submit" class="btn btn-secondary" formaction="/admin/suit-box/menu/view" formmethod="get">목록</button>
+                            </span>
+                            <span th:case="modify">
+                                <input type="hidden" name="menuCode" th:value="${menu?.menuCode}">
+                                <button type="submit" class="btn btn-primary" formaction="/admin/suit-box/menu/modify-menu">수정</button>
+                                <button type="submit" class="btn btn-primary" formaction="/admin/suit-box/menu/delete-menu">삭제</button>
+                                <button type="submit" class="btn btn-secondary" formaction="/admin/suit-box/menu/view" formmethod="get">목록</button>
+                            </span>
+                        </th:block>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+</div>
+<th:block th:replace="/admin/common/foot.html"></th:block>
+</body>
+</html>

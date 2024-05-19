@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <th:block th:replace="/admin/common/head.html"></th:block>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+            integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="/admin/css/datatable.css" rel="stylesheet">
+</head>
+
+<body class="sb-nav-fixed">
+<th:block th:replace="/admin/common/header.html"></th:block>
+<div id="layoutSidenav">
+    <th:block th:replace="/admin/common/sideNav.html"></th:block>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">설문 버전 관리</h1>
+                <div class="card mb-4 mt-4">
+                    <div class="card-header">
+                        <div class="justify-content-between d-flex align-items-center">
+                        <a class="btn btn-primary" href="/admin/survey/version-insert">설문 등록</a>
+                        <div class="text-end">
+                            <label>
+                                <select class="datatable-selector">
+                                    <option>희망식단코드 선택</option>
+                                    <option>체중감량</option>
+                                    <option>고단백식</option>
+                                </select>
+                            </label>
+                            <form class="d-none d-md-inline-block form-inline ms-auto me-0 my-2 my-md-0">
+                                <div class="input-group">
+                                    <input class="form-control" type="text" placeholder="Search for..."
+                                           aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+                                    <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i
+                                            class="fas fa-search"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="datatable">
+                            <thead>
+                            <tr>
+                                <th style="width: 10%">버전 코드</th>
+                                <th style="width: 10%">버전 별칭</th>
+                                <th>버전 설명</th>
+                                <th style="width: 15%">추가된 날짜</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="version : ${versionList}" th:onclick="|location.href='/admin/survey/version-detail?versionId=${version.versionId}'|">
+                                <td th:text="${version.versionId}"></td>
+                                <td th:text="${version.versionName}"></td>
+                                <td th:text="${version.versionExplain}"></td>
+                                <td th:text="${version.updateDate}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<th:block th:replace="/admin/common/foot.html"></th:block>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+<script src="/admin/js/scripts.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
+        crossorigin="anonymous"></script>
+</body>
+</html>

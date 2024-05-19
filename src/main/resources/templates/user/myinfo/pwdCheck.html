@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>나의정보</title>
+    <th:block th:replace="/user/common/head.html"></th:block>
+</head>
+<body>
+<div class="ly_all bl_all">
+    <th:block th:replace="/user/common/header.html"></th:block>
+    <div class="bl_sideMenuBack">
+        <div class="ly_maxWD ly_flex">
+            <th:block th:replace="/user/common/sideMenu.html"></th:block>
+            <div class="ly_inner02 ly_fgrow1 hp_fBack">
+                <div class="ly_midWDside">
+                    <h2 class="el_lv1Head">나의정보</h2>
+                    <div class="bl_doneBox ly_midWD hp_mt50">
+                        <div class="bl_doneBox__wrap">
+                            <div class="hp_fs18 hp_alignC">회원님의 개인정보를 안전하게 보호하기 위해 <br/>비밀번호를 확인해주세요.</div>
+                        </div>
+                        <form action="/user/myinfo/default" method="post">
+                            <input type="password" onkeyup="noSpace(this)" id="pwd" class="hp_w100 el_btnM hp_mt50 hp_inputBack hp_fs16" name="pwd" value="" placeholder="비밀번호 입력" title="비밀번호 입력"/>
+                            <button type="submit" class="el_pwdConfirmBtn el_btnM hp_br5 el_btnPointBack hp_w100 hp_mt15" disabled>확인</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <th:block th:replace="/user/common/footer.html"></th:block>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/user/js/condition.js"></script>
+<script>
+    $(function(){
+        $("#pwd").on("propertychange change keyup paste input", function() {
+            let inputVal = $(this).val();
+
+            if(inputVal == null || inputVal == ""){
+                $(".el_pwdConfirmBtn").attr("disabled", true);
+            }else{
+                $(".el_pwdConfirmBtn").attr("disabled", false);
+            }
+        })
+    })
+</script>
+</body>
+</html>

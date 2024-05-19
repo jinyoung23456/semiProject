@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <th:block th:replace="/user/common/head.html"></th:block>
+    <link rel="stylesheet" href="/user/css/survey.css">
+    <script defer src="/user/js/survey/progressBar.js"></script>
+</head>
+<body>
+    <div class="ly_all bl_all">
+        <th:block th:replace="/user/common/header.html"></th:block>
+        <div class="ly_midWD ly_inner02">
+            <div class="hp_bordDE hp_padding50">
+                <div class="outer">
+                    <div>뒤로가기 들어갈 자리</div>
+                    <form action="submit-survey" method="post">
+                        <input style="display: none" th:value="${infoResult.surveyHeight}" th:name="surveyHeight">
+                        <input style="display: none" th:value="${infoResult.surveyWeight}" th:name="surveyWeight">
+                        <input style="display: none" th:value="${infoResult.surveyBmi}" th:name="surveyBmi">
+                        <input style="display: none" th:value="${infoResult.surveyDiet}" th:name="surveyDiet">
+                        <input style="display: none" th:value="${infoResult.surveyDiabetes}" th:name="surveyDiabetes">
+                        <input style="display: none" th:value="${infoResult.surveyCancer}" th:name="surveyCancer">
+                        <input style="display: none" th:value="${infoResult.surveyKidney}" th:name="surveyKidney">
+                        <input style="display: none" th:value="${infoResult.surveyBlood}" th:name="surveyBlood">
+                        <div class="inner-list">
+                            <div class="inner">
+                                <div class="question_area el_lv1Head hp_mt85"> <!-- 질문란 -->
+                                    건강·영양상태 조사를 시작합니다.
+                                </div>
+                                <button type="button"
+                                    class="el_btnM el_btnPointBack hp_w50 hp_br5 hp_mt30 hp_marginAuto button-start">시작</button>
+                            </div>
+                            <div th:each="question:${questionList}" class="inner">
+                                <div class="question_area" th:text="${question.questionText}"></div>
+                                <div class="select">
+                                    <table class="selectTable">
+                                    <tr th:each="answer: ${question.answerList}">
+                                        <td><input type="radio"
+                                                   th:name="|${question.questionCategory}score${question.questionId}|"
+                                                   th:value="${answer.answerValue}"
+                                                   th:id="${answer.answerId}">
+                                            <label th:text="${answer.answerText}" th:for="${answer.answerId}"></label>
+                                        </td>
+                                    </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="inner">
+                                <div class="question_area hp_mt50">
+                                    설문이 끝났어요! <br>
+                                    제출하시겠어요?
+                                </div>
+                                <div class="hp_alignC hp_mt30"> <button type="submit"
+                                        class="submit-button el_btnPointBack hp_br5">
+                                        제출
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="progress_area">
+                        <div class="progress_bar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <th:block th:replace="/user/common/footer.html"></th:block>
+    </div>
+</body>
+</html>

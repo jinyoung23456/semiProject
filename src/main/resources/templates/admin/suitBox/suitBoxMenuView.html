@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <th:block th:replace="~{/admin/common/head.html}"></th:block>
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"
+        integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+    <script defer src="/admin/js/suit-box/suitBox.mjs"></script>
+    <script defer type="module" src="/admin/js/suit-box/filter.mjs"></script>
+    <link href="/admin/css/datatable.css" rel="stylesheet">
+</head>
+
+<body class="sb-nav-fixed">
+    <th:block th:replace="~{/admin/common/header.html}"></th:block>
+    <div id="layoutSidenav">
+        <th:block th:replace="~{/admin/common/sideNav.html}"></th:block>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">맞춤도시락</h1>
+                    <div class="card mb-4 mt-4">
+                        <div class="card-header">
+                            <div class="justify-content-between d-flex align-items-center">
+                                <a class="btn btn-primary" href="/admin/suit-box/menu/set">메뉴등록</a>
+                                <div class="text-end">
+                                    <label>
+                                        <select class="datatable-selector" id="criteria">
+                                            <option value="all">=== 전체 ===</option>
+                                            <option value="category">메뉴 분류</option>
+                                            <option value="status">판매 상태</option>
+                                        </select>
+                                        <select class="datatable-selector" id="value">
+                                            <option>=== 전체 ===</option>
+                                        </select>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <table class="datatable">
+                                <thead>
+                                    <tr>
+                                        <th>코드</th>
+                                        <th>이름</th>
+                                        <th>분류</th>
+                                        <th>추가금</th>
+                                        <th>판매상태</th>
+                                        <th>탄수화물</th>
+                                        <th>당류</th>
+                                        <th>단백질</th>
+                                        <th>지방</th>
+                                        <th>포화지방</th>
+                                        <th>트랜스지방</th>
+                                        <th>콜레스테롤</th>
+                                        <th>나트륨</th>
+                                        <th>칼로리</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="menuRows">
+                                    <tr th:each="menu : ${menuList}">
+                                        <td th:text="${menu.menuCode}"></td>
+                                        <td th:text="${menu.menuName}"></td>
+                                        <td th:text="${menu.menuCategory}"></td>
+                                        <td th:text="${menu.menuExtracash}"></td>
+                                        <td th:text="${menu.menuStatus}"></td>
+                                        <td th:text="${menu.menuCarbo}"></td>
+                                        <td th:text="${menu.menuSugar}"></td>
+                                        <td th:text="${menu.menuProtein}"></td>
+                                        <td th:text="${menu.menuFat}"></td>
+                                        <td th:text="${menu.menuSaturatedFat}"></td>
+                                        <td th:text="${menu.menuTransFat}"></td>
+                                        <td th:text="${menu.menuCholesterol}"></td>
+                                        <td th:text="${menu.menuNatrium}"></td>
+                                        <td th:text="${menu.menuCalory}"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="/admin/js/scripts.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+<script src="/admin/js/datatables-simple-demo.js"></script>
+</html>

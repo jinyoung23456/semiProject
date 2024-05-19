@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <th:block th:replace="/admin/common/head.html"></th:block>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.dataTables.min.css">
+    <script src="https://cdn.datatables.net/2.0.5/js/dataTables.min.js"></script>
+</head>
+<body class="sb-nav-fixed">
+<th:block th:replace="/admin/common/header.html"></th:block>
+<!-- navbar -->
+<div id="layoutSidenav">
+    <th:block th:replace="/admin/common/sideNav.html"></th:block>
+    <!-- layoutSidenav_nav -->
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">결제 관리</h1>
+                <div class="card mb-4 mt-4">
+                    <div class="card-header justify-content-between d-flex align-items-center">
+                        <i class="fas fa-table me-1"></i>
+                        <div>
+                            <label>
+                                <select class="datatable-selector">
+                                    <option value="select">주문상태 선택</option>
+                                    <option value="O">주문완료</option>
+                                    <option value="X">주문취소</option>
+                                    <option value="C">구매확정</option>
+                                </select>
+                            </label>
+                            <form class="d-none d-md-inline-block form-inline ms-auto me-0 my-2 my-md-0">
+                                <div class="input-group">
+                                    <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+                                    <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table id="datatablesSimple">
+                            <thead>
+                            <tr>
+                                <th>주문코드</th>
+                                <th>주문상태</th>
+                                <th>주문인(회원아이디)</th>
+                                <th>수령인</th>
+                                <th>결제금액</th>
+                                <th>결제날짜</th>
+                                <th>결제상태</th>
+                                <th>결제방법</th>
+                            </tr>
+                            </thead>
+                            <tfoot>
+                            <tr>
+                                <th>주문코드</th>
+                                <th>주문상태</th>
+                                <th>주문인(회원아이디)</th>
+                                <th>수령인</th>
+                                <th>결제금액</th>
+                                <th>결제날짜</th>
+                                <th>결제상태</th>
+                                <th>결제방법</th>
+                            </tr>
+                            </tfoot>
+                            <tbody>
+                            <tr th:each="orderList : ${ orderLists }">
+                                <td>
+                                    <a th:href="@{'/admin/orderView?orderCode=' + ${ orderList.orderCode }}" th:text="${ orderList.orderCode }"></a>
+                                </td>
+                                <td th:text="${ orderList.orderStatus }"></td>
+                                <td th:text="|${ orderList.member.name }(${ orderList.member.id })|"></td>
+                                <td>
+                                    <span th:if="${ orderList.orderRecipient }" th:text="${ orderList.orderRecipient }"></span>
+                                    <span th:unless="${ orderList.orderRecipient }" th:text="${orderList.member.name}"></span>
+                                </td>
+                                <td th:text="${ '￦ ' + orderList.pay.payPrice }"></td>
+                                <td th:text="${ orderList.pay.payDate }"></td>
+                                <td th:text="${ orderList.pay.payStatus }"></td>
+                                <td th:text="${ orderList.pay.payMethod }"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<th:block th:replace="/admin/common/foot.html"></th:block>
+</body>
+</html>

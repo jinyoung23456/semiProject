@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <th:block th:replace="/admin/common/head.html"></th:block>
+    <link href="/admin/css/datatable.css" rel="stylesheet">
+    <script defer src="/admin/js/survey/surveyQuestionTable.js"></script>
+</head>
+
+<body class="sb-nav-fixed">
+    <th:block th:replace="/admin/common/header.html"></th:block>
+    <div id="layoutSidenav">
+        <th:block th:replace="/admin/common/sideNav.html"></th:block>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4" th:text="|version.${version.versionId}|"></h1>
+                    <table class="datatable-table mt-4">
+                        <colgroup>
+                            <col style="width:200px" />
+                            <col />
+                            <col style="width:200px" />
+                            <col />
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <th scope="row" style="width: 10%">버전 별칭</th>
+                                <td th:text="${version.versionName}" style="width: 15%">"</td>
+                                <th scope="row" style="width: 10%">한줄 설명</th>
+                                <td th:text="${version.versionExplain}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="card-body">
+                        <table class="datatable">
+                            <thead>
+                                <tr>
+                                    <th style="width: 10%">질문 번호</th>
+                                    <th style="width: 10%">영양소</th>
+                                    <th>질문 내용</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <span th:each="question:${questionList}">
+                                    <tr class="view">
+                                        <td th:text="${question.questionOrder}"></td>
+                                        <th:block th:switch="${question.questionCategory}">
+                                            <span th:case="C">
+                                                <td>탄수화물</td>
+                                            </span>
+                                            <span th:case="P">
+                                                <td>단백질</td>
+                                            </span>
+                                            <span th:case="F">
+                                                <td>지방</td>
+                                            </span>
+                                            <span th:case="W">
+                                                <td>운동</td>
+                                            </span>
+                                        </th:block>
+                                        <td th:text="${question.questionText}"></td>
+                                    </tr>
+                                    <span th:if="${question.answerList.get(0).answerId != 0}">
+                                        <tr class="set" style="display: none; " ;>
+                                            <th></th>
+                                            <th style="background-color: #F2F2F2">점수</th>
+                                            <th style="background-color: #F2F2F2">답변</th>
+                                        </tr>
+                                        <tr class="set" ; th:each="answer:${question.answerList}"
+                                            style="display: none;">
+                                            <td></td>
+                                            <td th:text="${answer.answerValue}" style=" background-color: #F2F2F2"></td>
+                                            <td th:text="${answer.answerText}" style=" background-color: #F2F2F2"></td>
+                                        </tr>
+                                    </span>
+                                </span>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <table class="datatable">
+                        <tr>
+                            <th style="width: 10%;">점수 분류</th>
+                            <th style="width: 18%;">매우 낮음</th>
+                            <th style="width: 18%;">낮음</th>
+                            <th style="width: 18%;">보통</th>
+                            <th style="width: 18%;">높음</th>
+                            <th style="width: 18%;">매우 높음</th>
+                        </tr>
+                        <tr th:each="range:${rangeList}">
+                            <th:block th:switch="${range.category}">
+                                <th:block th:case="C">
+                                    <td>탄수화물</td>
+                                </th:block>
+                                <th:block th:case="P">
+                                    <td>단백질</td>
+                                </th:block>
+                                <th:block th:case="F">
+                                    <td>지방</td>
+                                </th:block>
+                                <th:block th:case="W">
+                                    <td>운동</td>
+                                </th:block>
+                            </th:block>
+                            <td>1 ~ <a th:text="${range.range1 - 1}"></a></td>
+                            <td><a th:text="|${range.range1} ~ |"></a><a th:text="${range.range2 - 1}"></a></td>
+                            <td><a th:text="|${range.range2} ~ |"></a><a th:text="${range.range3 - 1}"></a></td>
+                            <td><a th:text="|${range.range3} ~ |"></a><a th:text="${range.range4 - 1}"></a></td>
+                            <td><a th:text="${range.range4}"></a> ~ 10</td>
+                        </tr>
+                    </table>
+                    <div class="editBtn" style="text-align: right;">
+                            <span>
+                                <button type="button" class="btn btn-primary" th:onclick="@{|location.href='/admin/survey/version-set?versionId=${version.versionId}'|}">설문 수정</button>
+                                <button type="button" class="btn btn-primary" th:onclick="@{|location.href='/admin/survey/version-delete?versionId=${version.versionId}'|}">설문 삭제</button>
+                                <button type="button" class="btn btn-secondary" th:onclick="@{|location.href='/admin/survey/version-list'|}">목록</button>
+                            </span>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <th:block th:replace="/admin/common/foot.html"></th:block>
+</body>
+
+</html>

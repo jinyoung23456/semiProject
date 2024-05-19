@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <th:block th:replace="/admin/common/head.html"></th:block>
+</head>
+<body>
+<th:block th:replace="/admin/common/header.html"></th:block>
+<div id="layoutSidenav">
+    <th:block th:replace="/admin/common/sideNav.html"></th:block>
+
+    <!-- layoutSidenav_nav -->
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">상품 상세보기</h1>
+                <form method="post" action="/admin/product/productUpdate" enctype="multipart/form-data">
+<span th:if="${setCondition} != 'addProduct'">
+    <input th:value="${product?.productCode}" name="productCode" style="display: none">
+</span>
+                    <table class="datatable-table mt-4">
+                        <colgroup>
+                            <col style="width:200px"/>
+                            <col style="width:200px"/>
+                        </colgroup>
+                        <tbody>
+                        <!-- 보기, 수정 -->
+                        <tr>
+                            <th scope="">상품코드</th>
+                            <td colspan="3" class="productCode" th:text="${product?.productCode}"></td>
+                        </tr>
+                        <!-- // 보기, 수정 -->
+                        <tr>
+                            <th scope="row">상품이름</th>
+                            <td colspan="3"><input name="productName" class="productName"
+                                                   th:value="${product?.productName}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">판매상태</th>
+                            <td>
+                                <select class="datatable-selector" name="productStatus">
+                                    <option value="">판매상태 선택</option>
+                                    <option value="판매준비중" th:selected="${product?.productStatus == '판매준비중'}">판매준비중
+                                    </option>
+                                    <option value="판매중" th:selected="${product?.productStatus == '판매중'}">판매중</option>
+                                    <option value="절판" th:selected="${product?.productStatus == '절판'}">절판</option>
+                                    <option value="판매중단" th:selected="${product?.productStatus == '판매중단'}">판매중단</option>
+                                </select>
+                            </td>
+                            <th scope="row">상품가격</th>
+                            <td><input type="text" name="productPrice" class="productPrice"
+                                       th:value="${product?.productPrice}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">상품분류</th>
+                            <td colspan="3">
+                                <select id="category">
+                                    <option value="0">상품분류 선택</option>
+                                    <option value="1"
+                                            th:selected="${product?.productCategoryCode} == '4' or ${product?.productCategoryCode} == '5' or ${product?.productCategoryCode} == '6' or ${product?.productCategoryCode} == '7'"
+                                    >건강도시락
+                                    </option>
+                                    <option value="2" th:selected="${product?.productCategoryCode == '2'}">정성도시락
+                                    </option>
+                                    <option value="3"
+                                            th:selected="${product?.productCategoryCode} == '8' or ${product?.productCategoryCode} == '9'">
+                                        간편식
+                                    </option>
+                                </select>
+
+                                <select id="categoryDetail" name="productCategoryCode">
+                                    <option>=======</option>
+                                </select>
+
+                                <script th:inline="javascript">
+                                    /*<![CDATA[*/
+                                    const $category = document.querySelector('#category')
+                                    const $categoryDetail = document.querySelector('#categoryDetail')
+
+                                    /*]]>*/
+                                    function insertOption(select, text, value, isAbleFunction = true) {
+                                        const option = document.createElement('option')
+                                        let optionText = text
+                                        if (!isAbleFunction && isAbleFunction !== undefined) {
+                                            option.disabled = 'disabled'
+                                        }
+                                        option.value = value
+                                        option.innerText = optionText
+                                        select.append(option)
+                                    }
+
+                                    $category.addEventListener('change', () => {
+                                        $categoryDetail.innerHTML = ''
+                                        const option = $category.value;
+                                        switch (option) {
+                                            case ('0'):
+                                                insertOption($categoryDetail, '=======', 'all');
+                                                break;
+                                            case ('1'):
+                                                insertOption($categoryDetail, '암환자 회복식단', '4');
+                                                insertOption($categoryDetail, '신장 관리식단', '5');
+                                                insertOption($categoryDetail, '혈압 관리식단', '6');
+                                                insertOption($categoryDetail, '혈당 관리식단', '7');
+                                                break;
+                                            case ('2'):
+                                                insertOption($categoryDetail, '정성 도시락', '2');
+                                                break;
+                                            case ('3'):
+                                                insertOption($categoryDetail, '샐러드', '8');
+                                                insertOption($categoryDetail, '닭 가슴살', '9');
+                                        }
+                                    })
+                                </script>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">한줄설명</th>
+                            <td colspan="3">
+                                <input type="text" th:value="${product?.productSummary}" name="productSummary"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">파일첨부</th>
+                            <td colspan="3">
+                                <input type="file" accept="image/gif,image/jpeg,image/png" name="attachImage"/>
+                                <input type="file" accept="image/gif,image/jpeg,image/png" name="attachImage"/>
+                                <input type="file" accept="image/gif,image/jpeg,image/png" name="attachImage"/>
+                                <input type="file" accept="image/gif,image/jpeg,image/png" name="attachImage"/></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="editBtn" style="text-align: right;">
+                        <span th:if="${setCondition} == 'modifyProduct'">
+                        <button type="submit" class="btn btn-primary">수정</button>
+                            </span>
+                        <span th:if="${setCondition} == 'addProduct'">
+                        <button type="submit" class="btn btn-primary" formaction="/admin/product/add" formmethod="post">등록</button>
+                        </span>
+                        <button type="submit" class="btn btn-secondary" formaction="/admin/product/delete" formmethod="post">삭제</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+</div>
+
+<th:block th:replace="/admin/common/foot.html"></th:block>
+</body>
+
+</html>

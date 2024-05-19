@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <th:block th:replace="/admin/common/head.html"></th:block>
+</head>
+<body class="sb-nav-fixed">
+<th:block th:replace="/admin/common/header.html"></th:block>
+<!-- navbar -->
+<div id="layoutSidenav">
+    <th:block th:replace="/admin/common/sideNav.html"></th:block>
+    <!-- layoutSidenav_nav -->
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">환불 관리</h1>
+                <div class="card mb-4 mt-4">
+                    <div class="card-header justify-content-between d-flex align-items-center">
+                        <i class="fas fa-table me-1"></i>
+                        <div class="text-end">
+                            <label>
+                                <select class="datatable-selector">
+                                    <option selected>환불상태 선택</option>
+                                    <option>환불신청</option>
+                                    <option>환불진행중</option>
+                                    <option>환불승인</option>
+                                    <option>환불거부</option>
+                                </select>
+                            </label>
+                            <form class="d-none d-md-inline-block form-inline ms-auto me-0 my-2 my-md-0">
+                                <div class="input-group">
+                                    <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+                                    <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table id="datatablesSimple">
+                            <thead>
+                            <tr>
+                                <th>주문코드</th>
+                                <th>환불금액</th>
+                                <th>환불날짜</th>
+                                <th>환불상태</th>
+                                <th>회원이름(회원아이디)</th>
+                                <th>결제방법</th>
+                            </tr>
+                            </thead>
+                            <tfoot>
+                            <tr>
+                                <th>주문코드</th>
+                                <th>환불금액</th>
+                                <th>환불날짜</th>
+                                <th>환불상태</th>
+                                <th>회원이름(회원아이디)</th>
+                                <th>결제방법</th>
+                            </tr>
+                            </tfoot>
+                            <tbody>
+                            <tr th:each="refundList : ${ refundLists }">
+                                <td>
+                                    <a th:href="@{'/admin/refundView?orderCode=' + ${ refundList.orderCode }}" th:text="${ refundList.orderCode }"></a>
+                                </td>
+                                <td th:text="${ '￦ ' + refundList.refundPrice }"></td>
+                                <td th:text="${ refundList.refundDate }"></td>
+                                <td th:text="${ refundList.refundStatus }"></td>
+                                <td th:text="|${ refundList.member.name }(${ refundList.member.id })|"></td>
+                                <td th:text="${ refundList.pay.payMethod }"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<th:block th:replace="admin/common/foot.html"></th:block>
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <th:block th:replace="/user/common/head.html"></th:block>
+    <link rel="stylesheet" href="/user/css/product.css"/>
+    <script>
+        $(function () {
+            // tab
+            let tabLength = $(".bl_tabBtn").length;
+            let tabWD = 100 / tabLength;
+            $(".bl_tabBtn").css("width", tabWD + "%");
+            for (let i = 0; i < tabLength; i++) $(".bl_tabWrap:nth-of-type(" + (i + 1) + ") .bl_tabBtn").css("margin-left", (tabWD * i) + "%");
+
+            $(".bl_tabBtn").click(function () {
+                $(".bl_tabBtn").removeClass("hp_active")
+                $(this).addClass("hp_active");
+            });
+        })
+    </script>
+</head>
+<body>
+<div class="ly_all bl_all">
+    <th:block th:replace="/user/common/header.html"></th:block>
+    <div class="ly_maxWD ly_inner02 bl_pdView">
+        <div class="ly_flexC ly_fitemC">
+            <th:block th:if="${productList != null && !productList.imageList.isEmpty()}">
+                <img class="bl_pdView__img hp_mr40"
+                     th:src="@{/productUpload/original/{fileName}(fileName=${productList.imageList[0].savedName})}"
+                     alt="Product Image">
+            </th:block>
+            <th:block th:unless="${productList != null && !productList.imageList.isEmpty()}">
+                <span>No Image Available</span>
+            </th:block>
+            <div class="bl_pdView__wrap hp_ml40">
+                <h2 class="el_lv1Head hp_alignL" th:text="${productList.productName}"></h2>
+                <input id="productCode" class="productCode" hidden="hidden" th:value="${productList.productCode}"
+                       style="display: none">
+                <p class="hp_mt20 hp_fs16 hp_7Color" th:text="${productList.productSummary}"></p>
+                <div class="ly_spaceBetween ly_fitemC hp_mt50">
+                    <p class="hp_fs16">상품가격</p>
+                    <p class="hp_fs18 hp_alignR"><b class="hp_fw700 hp_fs24" th:text="${productList.productPrice}"></b>
+                        원</p>
+                </div>
+                <div class="ly_spaceBetween ly_fitemC hp_mt20">
+                    <p class="hp_fs16">상품수량</p>
+                    <div class="di_btn">
+                        <div class="decrease">
+                            <img src="/user/img/icon/minus.png" alt="minus-btn" onclick="decreaseQuantity()">
+                        </div>
+                        <input type="number" class="quantity" value="1" min="1" id="quantity">
+                        <div class="increase">
+                            <img src="/user/img/icon/plus.png" alt="plus-btn" onclick="increaseQuantity()">
+                        </div>
+                    </div>
+                </div>
+                <div class="ly_spaceBetween ly_fitemC hp_fs20 hp_mt30 hp_pt30 hp_bordDashTDE2">
+                    <span>총 상품금액</span>
+                    <span><b class="hp_fs28 hp_fw700 hp_pointColor" th:text="${productList.productPrice}"></b> 원</span>
+                </div>
+
+                <script>
+                    function decreaseQuantity() {
+                        var quantityField = document.getElementById("quantity");
+                        if (quantityField.value > 1) {
+                            quantityField.value--;
+                            updateTotalPrice();
+                        }
+                    }
+
+                    function increaseQuantity() {
+                        var quantityField = document.getElementById("quantity");
+                        quantityField.value++;
+                        updateTotalPrice();
+                    }
+
+                    function updateTotalPrice() {
+                        var quantityField = document.getElementById("quantity");
+                        var quantity = quantityField.value;
+                        var productPriceElement = document.querySelector(".hp_fw700.hp_fs24"); // 상품 가격이 표시된 요소 선택
+                        var productPrice = parseInt(productPriceElement.textContent.replace("원", "").replace(",", "")); // 상품 가격 추출 (숫자로 변환)
+                        var totalPrice = quantity * productPrice;
+                        var totalPriceElement = document.querySelector(".hp_fs28.hp_fw700.hp_pointColor");
+                        totalPriceElement.textContent = totalPrice.toLocaleString(); // 총 상품 가격 업데이트
+                    }
+                </script>
+
+                <div class="ly_flexC hp_mt50">
+                    <button type="button" class="el_btnM hp_br5 hp_w100 el_btnPointBord" onclick="postProduct()">장바구니
+                    </button>
+                    <script>
+                        function addToCart() {
+                            var productCode = document.getElementById("productCode").value;
+                            var count = document.getElementById("quantity").value;
+
+                            var totalPriceElement = document.querySelector(".hp_fs28.hp_fw700.hp_pointColor");
+                            var totalPrice = totalPriceElement.innerText.replace("원", "").replace(",", "");
+
+                            var data = {
+                                productCode: productCode,
+                                cartitemCount: count,
+                                totalPrice: totalPrice
+                            };
+                            console.log(productCode)
+                            console.log(count)
+                            console.log(totalPrice)
+
+                        }
+
+                        async function postProduct() {
+                            var productCode = document.getElementById("productCode").value;
+                            var count = document.getElementById("quantity").value;
+
+                            var totalPriceElement = document.querySelector(".hp_fs28.hp_fw700.hp_pointColor");
+                            var totalPrice = totalPriceElement.innerText.replace("원", "").replace(",", "");
+
+                            var data = {
+                                productCode: productCode,
+                                cartitemCount: count,
+                                totalPrice: totalPrice
+                            };
+                            const productToCart = data
+                            const json = JSON.stringify(productToCart)
+                            const response = await fetch('/user/product/add-to-cart', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json; charset=UTF-8'
+                                },
+                                body: json
+                            });
+                            const result = await response.text();
+                            console.log(result);
+                        }
+                    </script>
+                    <button type="button" class="el_btnM hp_br5 hp_w100 el_btnPointBack hp_ml10">바로결제</button>
+                </div>
+            </div>
+        </div>
+        <ul class="bl_tab">
+            <li class="bl_tabWrap">
+                <button type="button" class="bl_tabBtn hp_br0 hp_active">상품상세내용</button>
+                <div class="bl_tabCont hp_padding70">
+                    <th:block th:each="remainingImages : ${productList.imageList}">
+                        <!-- 만약 이미지가 존재하면 이미지를 표시합니다 -->
+                        <img  class="bl_pdView__img hp_mr40" th:if="${#lists.size(remainingImages) > 0}" th:src="@{/productUpload/original/{fileName}(fileName=${remainingImages.savedName})}"
+                             alt="Product Image">
+                    </th:block>
+
+                        <!--                    &lt;!&ndash; 이미지가 없으면 "No Image Available" 메시지를 표시합니다 &ndash;&gt;-->
+<!--                    <span th:unless="${#lists.size(image) > 0}">No Image Available</span>-->
+                </div>
+            </li>
+            <li class="bl_tabWrap">
+                <button type="button" class="bl_tabBtn hp_br0">상품리뷰</button>
+                <div class="bl_tabCont hp_padding70">
+                    <table class="bl_TBsearch">
+                        <caption class="WA">검색</caption>
+                        <colgroup>
+                            <col style="width:200px"/>
+                            <col style="width:*"/>
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row">조회기간 설정</th>
+                            <td class="hp_pt20">
+                                <div class="ly_spaceBetween ly_fitemC">
+                                    <div class="ly_spaceBetween ly_fgrow1">
+                                        <label class="bl_radioBxArea">
+                                            <input class="bl_radioBxArea__input" type="radio" name="searchPeriod"
+                                                   value="" checked>
+                                            <span class="bl_radioBxArea__txt">오늘</span>
+                                        </label>
+                                        <label class="bl_radioBxArea">
+                                            <input class="bl_radioBxArea__input" type="radio" name="searchPeriod"
+                                                   value="">
+                                            <span class="bl_radioBxArea__txt">1주일</span>
+                                        </label>
+                                        <label class="bl_radioBxArea">
+                                            <input class="bl_radioBxArea__input" type="radio" name="searchPeriod"
+                                                   value="">
+                                            <span class="bl_radioBxArea__txt">1개월</span>
+                                        </label>
+                                        <label class="bl_radioBxArea">
+                                            <input class="bl_radioBxArea__input" type="radio" name="searchPeriod"
+                                                   value="">
+                                            <span class="bl_radioBxArea__txt">3개월</span>
+                                        </label>
+                                        <label class="bl_radioBxArea">
+                                            <input class="bl_radioBxArea__input" type="radio" name="searchPeriod"
+                                                   value="">
+                                            <span class="bl_radioBxArea__txt">6개월</span>
+                                        </label>
+                                        <label class="bl_radioBxArea">
+                                            <input class="bl_radioBxArea__input" type="radio" name="searchPeriod"
+                                                   value="">
+                                            <span class="bl_radioBxArea__txt">1년</span>
+                                        </label>
+                                    </div>
+                                    <div class="ly_flex ly_fitemC hp_ml10">
+                                        <label for="" class="hp_w120px"><input type="date" id="" class="hp_w100" name=""
+                                                                               value="" title="검색 시작날짜 선택"/></label>
+                                        <span class="hp_ml10 hp_mr10"> ~ </span>
+                                        <label for="" class="hp_w120px"><input type="date" id="" class="hp_w100" name=""
+                                                                               value="" title="검색 종료날짜 선택"/></label>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="">카테고리 설정</label></th>
+                            <td class="hp_pb20">
+                                <div class="ly_flex">
+                                    <select id="" class="hp_w120px" name="">
+                                        <option value="">상태 선택</option>
+                                    </select>
+                                    <label for="" class="ly_fgrow1 hp_ml5"><input type="text" id="" class="hp_w100"
+                                                                                  name="" value=""
+                                                                                  title="검색어 입력"/></label>
+                                    <label for="" class="hp_ml5 hp_w70px"><input type="button" id=""
+                                                                                 class="hp_w100 el_btnPointBack" name=""
+                                                                                 value="검색" title="검색 버튼"/></label>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table class="bl_TBList">
+                        <caption class="WA">검색</caption>
+                        <colgroup>
+                            <col style="width:*"/>
+                            <col style="width:150px"/>
+                            <col style="width:150px"/>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th scope="col">리뷰내용</th>
+                            <th scope="col">회원아이디</th>
+                            <th scope="col">리뷰날짜</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="bl_TBList__ttl">
+                                <div class="container">
+                                    <div class="img-popup">
+                                        <div class="popup-inner">
+                                            <img src="/img/sample/img01.jpg" alt="이미지1">
+                                            <a href="#" class="close-btn"><i class="xi-close"></i><span class="blind">팝업창 닫기</span></a>
+                                        </div>
+                                    </div>
+                                    <div class="item-box">
+                                        <div class="item-img">
+                                            <a href="#"><img src="/img/sample/img01.jpg" alt=""/></a>
+                                            <a href="#"><img src="/img/sample/img02.jpg" alt=""/></a>
+                                            <a href="#"><img src="/img/sample/img03.jpg" alt=""/></a>
+                                            <a href="#"><img src="/img/sample/img01.jpg" alt=""/></a>
+                                            <a href="#"><img src="/img/sample/img03.jpg" alt=""/></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <textarea id="" class="" name="">너무 맛있어요! 최고입니다.</textarea>
+                            </td>
+                            <td>abcd1234</td>
+                            <td>2024.01.23</td>
+                        </tr>
+                        <tr>
+                            <td class="bl_TBList__ttl">
+                                <textarea id="" class="" name="">너무 맛있어요! 최고입니다.</textarea>
+                            </td>
+                            <td>abcd1234</td>
+                            <td>2024.01.23</td>
+                        </tr>
+                        <tr>
+                            <td class="bl_TBList__empty" colspan="4">작성된 리뷰가 없습니다.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <ul class="bl_paging hp_mt70">
+                        <li><a class="bl_pagingIcon__prev" href=""><p class="WA">이전 페이지로</p></a></li>
+                        <li><a class="hp_active" href="">1</a></li>
+                        <li><a class="bl_pagingIcon__next" href=""><p class="WA">다음 페이지로</p></a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="bl_tabWrap">
+                <button type="button" class="bl_tabBtn hp_br0">안내정보</button>
+                <div class="bl_tabCont hp_padding70">
+                    <div class="bl_pdView__info">
+                        <dl>
+                            <dt scope="row">배송</dt>
+                            <dd>
+                                ● 배송 시 고객님의 연락 부재 또는 주소 오기입으로 제품 수령이안될 경우 정책상 반송되게 되므로 이로 인한 환불은 소비자 보호에 관한 법률(전자상거래법)
+                                17조 3항에 의해 불가합니다. ※소비자보호에 관한 법률(전자상거래 법) 17조 3항 : 시간이 지나 다시 판매하기 곤란할 정도로 재화의 가치가 현저하게
+                                감소한 경우 소비자는 청약절회를 요청할 수 없다.<br/><br/>
+                                ● 신선 식품 특성상 제주/도서/산간지역은 배송이 원할치 못한 점 양해 부탁드립니다.<br/><br/>
+                                ● 택배사 사정으로 당일 물량 증가로 인해 오후 6시 이후 제품 수령할 수 있다는 부분 참고 부탁드립니다.<br/><br/>
+                                ● 겨울(5℃ 이하 날씨)에 아이스팩을 넣을 경우, 아이스팩과 맞닿은 면이 얼기 때문에 대략 12월 ~ 3월 사이에는 배송 시 아이스팩이 들어가지 않습니다.
+                                (12월 ~ 3월 사이 배송 시, 아이스팩 대신 얼린 우엉차가 들어갑니다.)<br/><br/>
+                                ● 새벽 배송 고객의 경우 원칙은 보냉 가방으로 배송되오나, 수거 상황에 따라 은박 보냉백으로 배송 될 수 있습니다. ※종료 예정자는 은박 보냉백으로
+                                배송됩니다.
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt scope="row">환불/취소</dt>
+                            <dd>
+                                ○ 교환/반품은 제품 하자시 실제 수령일부터 전자 상거래법에 의해 7일이내에 가능합니다. (조명에 의한 빛이나 모니터의 색상차이는 제품의 하자가
+                                아닙니다.)<br/><br/>
+                                ○ 주소 불명,연락처 불명,오입력으로 반송된 경우, 왕복택배비용을 고객님께서 지불하셔야 합니다.<br/><br/>
+                                ○ 반품배송비가 구매자 부담인경우 반품배송비 추가결제가 이루어지지 않으면 환불이 지연 될 수있습니다.<br/><br/>
+                                ○ 교환/반품시 지정택배를 이용하지 않을 경우 추가 금액이 발생 할 수 있으니 이에 대한 금액은 고객님께서 부담하셔야 합니다.<br/><br/>
+                                ○ 교환/반품시 최초 포장상태를 유지해주셔야 하며 반품 배송중 파손될 경우, 회수 상품의 상태에 따라 추가도색비나 리패킹비가 발생 할수
+                                있습니다.<br/><br/>
+                                ○ 고객센터로 연락을 주지 않으신 상태에서 임의로 제품을 발송하실 경우, 교환/반품 접수가 되지않고 다시 반송되는 경우가 있으니 꼭! 고객센터로 연락을 먼저
+                                주시기 바랍니다.<br/><br/><br/><br/>
+
+                                ● 단순 변심 또는 개인 사정에 의해 환불을 원하시는 경우 이용분 식단 추가 수령 후 남은 일수에 대하여 환불해드리고 있습니다. 쿠폰 또는 기간 할인은
+                                적용되지 않으며 이용 기간에 따른 쿠폰 적용 불가합니다.<br/><br/><br/><br/>
+
+                                ● 이벤트 상품은 중도 환불 시, 이용기간 + 이벤트 1주분 금액을 제외한 금액이 환불되므로, 꼭 유의하시고 진행바랍니다.
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <th:block th:replace="/user/common/footer.html"></th:block>
+</div>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>도시樂</title>
+    <th:block th:replace="/user/common/head.html"></th:block>
+</head>
+<body>
+<th:block th:replace="/user/common/header.html"></th:block>
+<div class="ly_all bl_all">
+    <div class="bl_sideMenuBack">
+        <div class="ly_maxWD ly_flex">
+            <th:block th:replace="/user/customer/sideMenu.html"></th:block>
+            <div class="ly_inner02 ly_fgrow1 hp_fBack">
+                <h2 class="el_lv1Head hp_mt50">1:1 문의하기</h2>
+                <div class="bl_doneBox ly_midWD hp_mt50">
+                    <div class="bl_doneBox__wrap">
+                        <div class="bl_doneBox__txt" th:text="${ message }"></div>
+                    </div>
+                    <a class="el_btnM hp_br5 el_btnPointBack hp_w100" onclick="location.href='/user/customer/askList'">문의내역으로 </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

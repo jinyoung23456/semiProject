@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ohgiraffers.dosirak.admin.suitBox.model.dao.AdminSuitBoxDAO">
+    <select id="getSuitBoxMenu" resultType="com.ohgiraffers.dosirak.admin.suitBox.model.dto.SuitBoxMenuDTO">
+        SELECT * FROM MENU
+    </select>
+    <insert id="registMenu" parameterType="com.ohgiraffers.dosirak.admin.suitBox.model.dto.SuitBoxMenuDTO">
+        INSERT INTO menu (menu_code, menu_name, menu_category, menu_extracash, menu_status,
+        menu_carbo, menu_sugar, menu_protein, menu_fat, menu_saturatedfat, menu_transfat,
+        menu_cholesterol, menu_natrium, menu_calory)
+        VALUES (null, #{menuName}, #{menuCategory}, #{menuExtracash}, #{menuStatus},
+        #{menuCarbo}, #{menuSugar}, #{menuProtein}, #{menuFat}, #{menuSaturatedFat},
+        #{menuTransFat}, #{menuCholesterol}, #{menuNatrium}, #{menuCalory})
+    </insert>
+    <select id="menuFindByMenuCode" resultType="com.ohgiraffers.dosirak.admin.suitBox.model.dto.SuitBoxMenuDTO">
+        SELECT * FROM MENU
+        WHERE menu_code = #{menuCode}
+    </select>
+    <update id="modifyMenu">
+        UPDATE MENU
+        SET
+        menu_name = #{menu.menuName},
+        menu_category = #{menu.menuCategory},
+        menu_extracash = #{menu.menuExtracash},
+        menu_status = #{menu.menuStatus},
+        menu_carbo = #{menu.menuCarbo},
+        menu_sugar = #{menu.menuSugar},
+        menu_protein = #{menu.menuProtein},
+        menu_fat = #{menu.menuFat},
+        menu_saturatedfat = #{menu.menuSaturatedFat},
+        menu_transfat = #{menu.menuTransFat},
+        menu_cholesterol = #{menu.menuCholesterol},
+        menu_natrium = #{menu.menuNatrium},
+        menu_calory = #{menu.menuCalory}
+        WHERE menu_code = #{menuCode}
+    </update>
+    <delete id="deleteMenu">
+        DELETE FROM MENU WHERE menu_code = #{menuCode}
+    </delete>
+    <select id="searchMenuByCondition" resultType="com.ohgiraffers.dosirak.admin.suitBox.model.dto.SuitBoxMenuDTO" parameterType="hashMap">
+        SELECT * FROM MENU WHERE
+        <if test="criteria == 'category'"> menu_category = #{value}</if>
+        <if test="criteria == 'status'"> menu_status = #{value}</if>
+    </select>
+</mapper>

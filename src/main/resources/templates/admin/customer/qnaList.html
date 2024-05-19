@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>자주 묻는 질문 관리페이지</title>
+    <th:block th:replace="~{/admin/common/head.html}"></th:block>
+</head>
+<body class="sb-nav-fixed">
+<th:block th:replace="~{/admin/common/header.html}"></th:block>
+<div id="layoutSidenav">
+    <th:block th:replace="~{/admin/common/sideNav.html}"></th:block>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h2 class="mt-4">자주 묻는 질문 관리</h2>
+                <div class="card mb-4 mt-4">
+                    <div class="card-header">
+                        <div class="justify-content-between d-flex align-items-center">
+                            <a class="btn btn-primary" href="/admin/customer/qnaWrite">새 질문 등록</a>
+                            <div class="text-end">
+                                <label>
+                                    <select id="categorySelect" class="datatable-selector">
+                                        <option value="전체">문의분류 선택</option>
+                                        <option value="회원">회원</option>
+                                        <option value="주문/결제">주문/결제</option>
+                                        <option value="배송/반품">배송/반품</option>
+                                        <option value="교환/취소/환불">교환/취소/환불</option>
+                                        <option value="서비스/기타">서비스/기타</option>
+                                    </select>
+                                </label>
+                                <form class="d-none d-md-inline-block form-inline ms-auto me-0 my-2 my-md-0">
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+                                        <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table id="datatablesSimple">
+                            <thead>
+                            <tr>
+                                <th>질문코드</th>
+                                <th>질문유형</th>
+                                <th>질문제목</th>
+                                <th>관리자아이디</th>
+                                <th>삭제</th>
+                            </tr>
+                            </thead>
+                            <tfoot>
+                            <tr>
+                                <th>질문코드</th>
+                                <th>질문유형</th>
+                                <th>질문제목</th>
+                                <th>관리자아이디</th>
+                                <th>삭제</th>
+                            </tr>
+                            </tfoot>
+                            <tbody>
+                            <tr th:each="qna : ${ qnaList }">
+                                <td th:text="${ qna.qnaCode }"></td>
+                                <td th:text="${ qna.askCategoryDTO.askCategoryName }"></td>
+                                <td><a th:href="|qnaDetail?qnaCode=${ qna.qnaCode }|" th:text="${ qna.qnaTitle }"></a></td>
+                                <td th:text="${ qna.adminId }"></td>
+                                <td>
+                                    <form action="qnaDelete" method="GET" onsubmit="return delete_event()">
+                                        <input type="hidden" name="qnaCode" th:value="${ qna.qnaCode }" />
+                                        <button type="submit" class="btn btn-secondary btn-sm">삭제</button>
+                                        <script type="text/javascript">
+                                            function delete_event() {
+                                                if(confirm("정말 삭제하시겠습니까?") === true) {
+                                                    return true;
+                                                } else {
+                                                    return false;
+                                                }
+                                            }
+                                        </script>
+                                    </form>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<th:block th:replace="~{/admin/common/foot.html}"></th:block>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="/js/scripts.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+<script src="/js/datatables-simple-demo.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', event => {
+        // 데이터 테이블 초기화
+        const datatablesSimple = document.getElementById('datatablesSimple');
+        let dataTable;
+        if (datatablesSimple) {
+            // 검색 기능을 활성화하여 테이블을 초기화합니다.
+            dataTable = new simpleDatatables.DataTable(datatablesSimple, {
+                searchable: true,
+            });
+        }
+
+        // 검색 입력 필드, 돋보기 버튼, 카테고리 설정
+        const searchInput = document.querySelector('.form-control');
+        const searchButton = document.getElementById('btnNavbarSearch');
+        const searchCondition = document.getElementById('categorySelect');
+
+        // 검색 입력 필드에서 엔터 키 이벤트를 감지합니다.
+        if (searchInput) {
+            searchInput.addEventListener('keydown', function(event) {
+                // 엔터 키를 누르면
+                if (event.key === 'Enter') {
+                    // 기본 동작(폼 제출)을 막습니다.
+                    event.preventDefault();
+
+                    // 입력된 검색어를 가져와 데이터 테이블에 적용합니다.
+                    const searchValue = searchInput.value;
+                    const categoryValue = searchCondition.value;
+
+                    if (dataTable && (searchValue || categoryValue === '전체')) {
+                        dataTable.search(searchValue);
+                    } else if (dataTable && categoryValue !== '전체') {
+                        dataTable.search(categoryValue);
+                    }
+                }
+            });
+        }
+
+        // 돋보기 버튼 클릭 이벤트를 추가합니다.
+        if (searchButton) {
+            searchButton.addEventListener('click', function() {
+                // 입력된 검색어와 선택된 카테고리를 가져와 데이터 테이블에 적용합니다.
+                const searchValue = searchInput.value;
+                const categoryValue = searchCondition.value;
+
+                if (dataTable && (searchValue || categoryValue === '전체')) {
+                    dataTable.search(searchValue);
+                } else if (dataTable && categoryValue !== '전체') {
+                    dataTable.search(categoryValue);
+                }
+            });
+        }
+
+        // 카테고리 선택 이벤트를 추가합니다.
+        if (searchCondition) {
+            searchCondition.addEventListener('change', function() {
+                // 카테고리가 선택된 후, 검색어가 입력되어 있다면 검색어를 가져와 데이터 테이블에 적용합니다.
+                const searchValue = searchInput.value;
+                const categoryValue = searchCondition.value;
+
+                if (dataTable && (searchValue || categoryValue === '전체')) {
+                    dataTable.search(searchValue);
+                } else if (dataTable && categoryValue !== '전체') {
+                    dataTable.search(categoryValue);
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

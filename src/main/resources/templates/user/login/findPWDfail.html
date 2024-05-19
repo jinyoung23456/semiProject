@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>비밀번호찾기</title>
+    <th:block th:replace="/user/common/head.html"></th:block>
+</head>
+<body>
+<div class="ly_all bl_all">
+    <th:block th:replace="/user/common/header.html"></th:block>
+    <div class="ly_midWD ly_inner02">
+        <h2 class="el_lv1Head">비밀번호 찾기</h2>
+        <div class="hp_bordDE hp_padding70 hp_mt50">
+            <div class="hp_alignC hp_fs16">
+                <p class="" th:text="${message}"></p>
+            </div>
+            <a class="hp_mt50 el_btnM hp_br5 el_btnPointBack hp_w100" href="/login">로그인</a>
+        </div>
+    </div>
+    <th:block th:replace="/user/common/footer.html"></th:block>
+</div>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주문 완료</title>
+    <th:block th:replace="/user/common/head.html"></th:block>
+    <link rel="stylesheet" href="/user/css/join.css"/>
+</head>
+<body>
+<div class="ly_all bl_all">
+    <th:block th:replace="/user/common/header.html"></th:block>
+    <div class="ly_midWD ly_inner02">
+        <h2 class="el_lv1Head">주문 실패</h2>
+        <div class="hp_bordDE hp_padding70 hp_mt50">
+            <div class="hp_alignC hp_fs16">
+                고객님의 주문이 정상적으로 완료되었습니다.
+                <ul class="" >
+<!--                    <li class="hp_mt30">주문 번호 : <span class="hp_fw700 hp_pointColor" th:test="${ orderDTO.get(0).orderCode }" ></span></li>-->
+<!--                    <li class="hp_fs13 hp_7Color hp_mt5">주문일 : <span th:text="${ orderDTO.get(0).pay.payDate }"></span></li>-->
+                </ul>
+            </div>
+            <div class="ly_flex hp_mt50">
+                <a class="el_btnM hp_br5 el_btnPointBack hp_w100" href="/user/main">홈으로</a>
+                <a class="el_btnM hp_br5 el_btnPointBord hp_w100 hp_ml10" href="">주문 상세</a>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="/user/common/footer.html"></th:block>
+</body>
+</html>

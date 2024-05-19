@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>나의정보</title>
+    <th:block th:replace="/user/common/head.html"></th:block>
+    <link rel="stylesheet" href="/user/css/mypage.css"/>
+</head>
+<body>
+<div class="ly_all bl_all">
+    <th:block th:replace="/user/common/header.html"></th:block>
+    <div class="bl_sideMenuBack">
+        <div class="ly_maxWD ly_flex">
+            <th:block th:replace="/user/common/sideMenu.html"></th:block>
+            <div class="ly_inner02 ly_fgrow1 hp_fBack">
+                <div class="ly_midWDside">
+                    <h2 class="el_lv1Head">나의정보</h2>
+                    <p class="hp_mt50 hp_alignR"><span class="hp_pointColor hp_fw700 hp_fs18">*</span> 필수입력 정보</p>
+                    <form action="/user/myinfo/modifyMyinfo" method="post">
+                        <table class="bl_TBView hp_mt5">
+                            <caption class="WA">나의 필수정보</caption>
+                            <colgroup>
+                                <col style="width:150px"/>
+                                <col style="width:*%"/>
+                                <col style="width:150px"/>
+                                <col style="width:200px"/>
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th scope="row">이름</th>
+                                <td th:text="${member.name}"></td>
+                                <th scope="row">아이디</th>
+                                <td th:text="${member.id}"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">생년월일</th>
+                                <td th:text="${member.birth}"></td>
+                                <th scope="row">성별</th>
+                                <td th:text="${member.gender}"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><label for="phone">휴대폰번호</label> <span class="hp_pointColor hp_fw700 hp_fs18">*</span></th>
+                                <td><input type="text" id="phone" class="hp_w200px" name="phone" th:value="${member.phone}" placeholder="휴대폰번호를 입력해주세요" title="휴대폰번호를 입력해주세요" required/></td>
+                                <th scope="row">가입날짜</th>
+                                <td th:text="${member.joindate}"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><label for="inputEmail">이메일</label> <span class="hp_pointColor hp_fw700 hp_fs18">*</span></th>
+                                <td colspan="3">
+                                    <div class="ly_flex">
+                                        <input type="email" id="inputEmail" name="email" class="hp_w200px" th:value="${member.email}" placeholder="입력해주세요" title="이메일 입력" required/>
+                                        <input type="button" value="중복확인" id="duplicationCheck" class="duplicationCheck el_btnM el_btnPointBord hp_br5 hp_ml5"/>
+                                        <input type="hidden" id="duplCheck" value=""/>
+                                        <input type="button" value="인증코드 발송" onclick="sendCode()" class="sendCodeBtn el_btnM el_btnPointBack hp_br5 hp_ml5"/>
+                                        <input type="hidden" th:value="${resultNum}" id="hiddenCode" name="hiddenCode"/>
+                                    </div>
+                                    <div class="tr_inputCode">
+                                        <div class="ly_flex hp_mt10">
+                                            <input type="text" id="inputCode" class="el_btnM hp_inputBack hp_w100" placeholder="인증번호를 입력해주세요" title="인증번호 입력"/>
+                                            <input type="button" value="인증확인" onclick="verifyCode()" class="el_btnM el_btnPointBord hp_br5 hp_ml5"/>
+                                            <input type="hidden" id="verifyVerificationCode" value=""/>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">마케팅동의</th>
+                                <td colspan="3" class="agree" th:data-agree="${member.agree}">
+                                    <label class="bl_checkBx">
+                                        <input type="checkbox" id="agreeSms" class="bl_checkBx__input" name="agree" value="문자">
+                                        <span class="bl_checkBx__check"></span>
+                                        <span class="hp_ml5">문자</span>
+                                    </label>
+                                    <label class="bl_checkBx hp_ml30">
+                                        <input type="checkbox" id="agreeEmail" class="bl_checkBx__input" name="agree" value="이메일">
+                                        <span class="bl_checkBx__check"></span>
+                                        <span class="hp_ml5">이메일</span>
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    <label for="address1">주소</label><br/>
+                                    <button type="button" class="el_deleteBtn el_btnS el_btn8Bord hp_br5 hp_mt5">주소삭제</button>
+                                </th>
+                                <td colspan="3">
+                                    <div class="ly_flex">
+                                        <input type="text" id="address1" class="hp_w200px" name="address1" th:value="${member.address1}" title="우편번호 찾기" readonly/>
+                                        <input type="button" id="searchZipCode" class="el_btnS el_btnPointBord hp_ml10" name="" value="우편번호 찾기"/>
+                                    </div>
+                                    <div class="ly_flex ly_fitemC hp_mt10">
+                                        <input type="text" id="address2" class="hp_w100" name="address2" th:value="${member.address2}" title="주소 입력" readonly/>
+                                        <input type="text" id="address3" class="hp_w100 hp_ml10" name="address3"  th:value="${member.address3}" placeholder="상세주소를 입력해주세요" title="상세주소 입력"/>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="hp_alignR hp_mt10">
+                            <a class="el_withdrawalBtn hp_7Color" href="/user/myinfo/withdrawal">회원탈퇴 > </a>
+                        </div>
+                        <button type="submit" class="el_editBtn el_btnM hp_br5 el_btnPointBack hp_mt70 hp_marginAuto">수정</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <th:block th:replace="/user/common/footer.html"></th:block>
+</div>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/user/js/condition.js"></script>
+<script>
+    const message = '[[${message}]]';
+    message && alert(message);
+
+    $(function(){
+        // 수정
+        $("input").on("propertychange change keyup paste input", function() {
+            $(".el_editBtn").css("display", "block");
+        })
+        $("#searchZipCode").click(function(){
+            $(".el_editBtn").css("display", "block");
+        })
+        // 주소삭제
+        $(".el_deleteBtn").click(function(){
+            $(".el_editBtn").css("display", "block");
+            $("#address1").val("");
+            $("#address2").val("");
+            $("#address3").val("");
+        })
+        // 마케팅동의
+        let agree = $(".agree").data('agree');
+        if(agree.includes("문자")) $("#agreeSms").prop("checked", true);
+        if(agree.includes("이메일")) $("#agreeEmail").prop("checked", true);
+
+        // 이메일 중복확인 버튼
+        $("#inputEmail").on("propertychange change keyup paste input", function(){
+            $(".sendCodeBtn").hide();
+            $(".tr_inputCode").hide();
+            $("#duplicationCheck").show();
+        })
+
+        // 이메일 인증 후
+        let passAlert = window.alert;
+        window.alert = function (){
+            passAlert.apply(this, arguments);
+            if(arguments[0] === "인증되었습니다."){
+                $(".sendCodeBtn").hide();
+                $(".tr_inputCode").hide();
+            }
+        }
+
+
+        let originVal = $("#inputEmail").val();
+        let modifiedVal = $("#inputEmail").val();
+
+        // 이메일 수정했을 때
+        $("#inputEmail").on("propertychange change keyup paste input", function(){
+            modifiedVal = $(this).val();
+        })
+
+        $(".el_editBtn").click(function(){
+
+            console.log("originVal : " + originVal);
+            console.log("modifiedVal : " + modifiedVal);
+
+            if(modifiedVal == null || modifiedVal == ""){
+                alert("이메일을 입력해주세요.");
+                return false;
+            }else{
+
+                if(originVal != modifiedVal){
+
+                    if($("#duplCheck").val() != "pass"){
+                        alert("수정한 이메일의 중복확인을 진행해 주세요.");
+                        return false;
+                    }
+                    if($("#verifyVerificationCode").val() != "pass"){
+                        alert("인증코드를 발송하여 인증확인을 진행해 주세요.");
+                        return false;
+                    }
+
+                }
+
+            }
+
+        })
+
+    })
+</script>
+</body>
+</html>

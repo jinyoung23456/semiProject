@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <th:block th:replace="/admin/common/head.html"></th:block>
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+    <script>
+        const message = '[[${message}]]';
+        message && alert(message);
+        $(function(){
+            // 수정
+            $(".editBtn").hide();
+            $("input").on("propertychange change keyup paste input", function() {
+                $(".editBtn").show();
+            })
+            // 주소삭제
+            $(".deleteBtn").click(function(){
+                $(".editBtn").show();
+                $("#address1").val("");
+                $("#address2").val("");
+                $("#address3").val("");
+            })
+            // 마케팅동의
+            let agree = $(".agree").data('agree');
+            if (agree !== undefined) {
+                if(agree.includes("문자")) $("#agreeSms").prop("checked", true);
+                if(agree.includes("이메일")) $("#agreeEmail").prop("checked", true);
+            }
+
+
+            // 비밀번호 초기화
+            $(".el_resetPwdBtn").click(function (){
+                const urlId = new URL(location.href).searchParams.get("id");
+                location.href = "/admin/member/memberPwdReset?id="+urlId;
+            })
+
+            // 관리자 권한등급
+            const managerAuthor = '[[${managerAuthor}]]';
+            switch (managerAuthor){
+                case "1" :
+                    $(".grade2Input").removeClass("none");
+                    $(".grade2Input").attr("readonly", false);
+                    $(".grade2Btn").removeClass("hp_dpNone");
+                    break;
+                case "2" :
+                    $(".grade2Input").removeClass("none");
+                    $(".grade2Input").attr("readonly", false);
+                    $(".grade2Btn").removeClass("hp_dpNone");
+                    break;
+                case "3" :
+                    $(".agree").text(agree);
+                    break;
+            }
+        })
+    </script>
+</head>
+<body>
+<body class="sb-nav-fixed">
+<th:block th:replace="/admin/common/header.html"></th:block>
+<div id="layoutSidenav">
+    <th:block th:replace="/admin/common/sideNav.html"></th:block>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">회원 상세</h1>
+                <form action="/admin/member/modifyMember" method="post">
+                    <table class="datatable-table mt-4">
+                        <colgroup>
+                            <col style="width:15%"/>
+                            <col style="width:*%"/>
+                            <col style="width:15%"/>
+                            <col style="width:*%"/>
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <th scope="row">이름</th>
+                                <td th:text="${member.name}"></td>
+                                <th scope="row">아이디</th>
+                                <td><input class="none" type="text" name="id" th:value="${member.id}" readonly/></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">생년월일</th>
+                                <td th:text="${member.birth}"></td>
+                                <th scope="row">성별</th>
+                                <td th:text="${member.gender}"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">휴대폰번호</th>
+                                <td><input class="none grade2Input" type="text" name="phone" th:value="${member.phone}" required readonly/></td>
+                                <th scope="row">가입날짜</th>
+                                <td th:text="${member.joindate}"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">이메일</th>
+                                <td><input class="none grade2Input" type="email" name="email" th:value="${member.email}" required readonly/></td>
+                                <th scope="row">마케팅동의</th>
+                                <td class="agree" th:data-agree="${member.agree}">
+                                    <label class="me-3 hp_dpNone grade2Btn"><input id="agreeSms" type="checkbox" name="agree" value="문자"> 문자</label>
+                                    <label class="hp_dpNone grade2Btn"><input id="agreeEmail" type="checkbox" name="agree" value="이메일"> 이메일</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    주소<br/>
+                                    <button type="button" class="hp_dpNone grade2Btn deleteBtn btn btn-outline-dark btn-sm mt-1">주소삭제</button>
+                                </th>
+                                <td colspan="3">
+                                    <input class="none grade2Input" type="text" id="address1" name="address1" th:value="${member.address1}" size="20" placeholder="우편번호" readonly>
+                                    <input type="button" id="searchZipCode" class="hp_dpNone grade2Btn btn btn-success btn-sm" value="우편번호 찾기">
+                                    <div class="mt-1">
+                                        <input class="none grade2Input" type="text" id="address2" name="address2" th:value="${member.address2}" size="30" placeholder="주소" readonly>
+                                        <input class="none grade2Input" type="text" id="address3" name="address3" th:value="${member.address3}" size="30" placeholder="상세주소" readonly>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="text-end">
+                        <button type="submit" class="hp_dpNone grade2Btn editBtn btn btn-primary">수정</button>
+                        <a class="btn btn-secondary" href="/admin/member/memberList">목록</a>
+                        <button type="button" class="hp_dpNone grade2Btn el_resetPwdBtn btn btn-dark">비밀번호 초기화</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+</div>
+<th:block th:replace="/admin/common/foot.html"></th:block>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    const $searchZipCode = document.getElementById("searchZipCode");
+    $searchZipCode.onclick = function(){
+        new daum.Postcode({
+            oncomplete: function(data) {
+                document.getElementById("address1").value = data.zonecode;
+                document.getElementById("address2").value = data.address;
+                document.getElementById("address3").focus();
+            }
+        }).open();
+    }
+</script>
+</body>
+</body>
+</html>

@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost/dosirak
+    username: dosirak
+    password: dosirak
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: dosirak240414@gmail.com
+    password: nqau ylpu nmly priv
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+mybatis:
+  mapper-locations: mappers/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true

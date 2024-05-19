@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ohgiraffers.dosirak.admin.product.dao.ProductMapper">
+    <resultMap id="product" type="com.ohgiraffers.dosirak.admin.product.dto.productDTO">
+        <id property="productName" column="PRODUCT_NAME"/>
+        <result property="productCode" column="PRODUCT_CODE"/>
+        <result property="productPrice" column="PRODUCT_PRICE"/>
+        <result property="productStatus" column="PRODUCT_STATUS"/>
+        <result property="productCategoryCode" column="PRODUCT_CATEGORY_CODE"/>
+        <result property="productSummary" column="product_summary"/>
+    </resultMap>
+    <select id="findAllProduct" resultMap="product">
+        SELECT PRODUCT_NAME,PRODUCT_CODE,PRODUCT_PRICE,PRODUCT_STATUS,PRODUCT_CATEGORY_CODE
+        FROM tbl_product;
+    </select>
+    <select id="productSelectList" resultMap="product">
+        SELECT PRODUCT_NAME, PRODUCT_CODE, PRODUCT_PRICE, PRODUCT_STATUS, PRODUCT_CATEGORY_CODE
+        FROM tbl_product
+        WHERE PRODUCT_NAME LIKE CONCAT('%', #{keyword}, '%');
+    </select>
+    <insert id="insertProduction" parameterType="com.ohgiraffers.dosirak.admin.product.dto.productDTO">
+        INSERT INTO tbl_product (PRODUCT_NAME, PRODUCT_PRICE, PRODUCT_STATUS, PRODUCT_CATEGORY_CODE,product_summary)
+        VALUES (#{productName}, #{productPrice}, #{productStatus}, #{productCategoryCode}, #{productSummary})
+    </insert>
+    <select id="getProductByCode" resultType="com.ohgiraffers.dosirak.admin.product.dto.productDTO">
+        SELECT *
+        FROM tbl_product
+        WHERE PRODUCT_CODE = #{productCode};
+    </select>
+    <select id="productViewPage" resultMap="product">
+        SELECT *
+        FROM tbl_product;
+    </select>
+    <update id="productUpdate">
+        UPDATE tbl_product
+        SET
+        PRODUCT_NAME = #{productName},
+        PRODUCT_PRICE = #{productPrice},
+        PRODUCT_STATUS = #{productStatus},
+        PRODUCT_SUMMARY = #{productSummary},
+        PRODUCT_CATEGORY_CODE = #{productCategoryCode}
+        WHERE PRODUCT_CODE = #{productCode};
+    </update>
+
+    <insert id="insertImage">
+    INSERT INTO
+        product_img (img_code, product_code, saved_name, save_path)
+    VALUES
+        ( #{imgCode}, #{productCode}, #{savedName}, #{savePath})
+    </insert>
+
+    <select id="codePlz" resultType="com.ohgiraffers.dosirak.admin.product.dto.productDTO">
+        SELECT
+        *
+        FROM
+        tbl_product
+        ORDER BY
+        PRODUCT_CODE DESC
+        LIMIT 1
+
+    </select>
+    <delete id="deleteProductById" >
+        DELETE FROM tbl_product WHERE PRODUCT_CODE = #{productCode}
+    </delete>
+    <!-- 상태와 이름으로 제품 검색 -->
+    <select id="findByProductStatusAndProductNameContaining" resultType="com.ohgiraffers.dosirak.admin.product.dto.productDTO">
+        SELECT * FROM tbl_product
+        WHERE PRODUCT_STATUS = #{status}
+        AND productName LIKE CONCAT('%', #{name}, '%')
+    </select>
+
+    <!-- 상태로 제품 검색 -->
+    <select id="findByProductStatus" resultType="com.ohgiraffers.dosirak.admin.product.dto.productDTO">
+        SELECT * FROM tbl_product
+        WHERE PRODUCT_STATUS = #{status}
+    </select>
+
+    <!-- 이름으로 제품 검색 -->
+    <select id="findByProductNameContaining" resultType="com.ohgiraffers.dosirak.admin.product.dto.productDTO">
+        SELECT * FROM tbl_product
+        WHERE PRODUCT_NAME LIKE CONCAT('%', #{name}, '%')
+    </select>
+    <select id="findByCriteria" resultType="com.ohgiraffers.dosirak.admin.product.dto.productDTO">
+        SELECT *
+        FROM tbl_product
+        WHERE
+        (#{productName} IS NULL OR PRODUCT_NAME LIKE CONCAT('%', #{productName}, '%'))
+        AND
+        (#{productCategoryCode} IS NULL OR PRODUCT_CATEGORY_CODE = #{productCategoryCode})
+        AND
+        (#{productStatus} IS NULL OR PRODUCT_STATUS = #{productStatus})
+    </select>
+
+
+</mapper>

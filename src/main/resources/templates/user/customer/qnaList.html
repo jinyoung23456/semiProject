@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>자주 묻는 질문</title>
+    <th:block th:replace="/user/common/head.html"></th:block>
+    <script src="/js/common/jquery-3.7.1.min.js"></script>
+    <script>
+        $(function () {
+            // tab
+            let tabLength = $(".bl_tabBtn").length;
+            let tabWD = 104 / tabLength;
+            $(".bl_tabBtn").css("width", tabWD + "%");
+            for (let i = 0; i < tabLength; i++) $(".bl_tabWrap:nth-of-type(" + (i + 1) + ") .bl_tabBtn").css("margin-left", (tabWD * i) + "%");
+
+            $(".bl_tabBtn").click(function () {
+                $(".bl_tabBtn").removeClass("hp_active")
+                $(this).addClass("hp_active");
+            });
+        })
+    </script>
+</head>
+<body>
+<th:block th:replace="/user/common/header.html"></th:block>
+<div class="ly_all bl_all">
+    <div class="bl_sideMenuBack">
+        <div class="ly_maxWD ly_flex">
+            <th:block th:replace="/user/customer/sideMenu.html"></th:block>
+            <div class="ly_inner02 ly_fgrow1 hp_fBack">
+                <h2 class="el_lv1Head">자주 묻는 질문</h2>
+                <ul class="bl_tab hp_mt50 ly_midWD">
+                    <li class="bl_tabWrap">
+                        <button type="button" class="bl_tabBtn hp_active">회원</button>
+                        <div class="bl_tabCont">
+                            <table class="bl_TBList bl_TBList__qna">
+                                <caption class="WA">검색</caption>
+                                <colgroup>
+                                    <col style="width:70px" />
+                                </colgroup>
+                                <tbody>
+                                <tr th:each="qna, qIndex : ${qnaList}" th:if="${qna.askCategoryCode == 1}">
+                                    <td>
+                                        <span class="bl_TBList__qnaNum" style="margin-left: 20px;"></span>
+                                    </td>
+                                    <td class="bl_TBList__ttl">
+                                        <a th:href="|qnaDetail?qnaCode=${ qna.qnaCode }|" th:text="${qna.qnaTitle}" class="hp_ellipsis"></a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li class="bl_tabWrap">
+                        <button type="button" class="bl_tabBtn">구매/결제</button>
+                        <div class="bl_tabCont">
+                            <table class="bl_TBList bl_TBList__qna">
+                                <caption class="WA">검색</caption>
+                                <colgroup>
+                                    <col style="width:70px" />
+                                </colgroup>
+                                <tbody>
+                                <tr th:each="qna, qIndex : ${qnaList}" th:if="${qna.askCategoryCode == 2}">
+                                    <td>
+                                        <span class="bl_TBList__qnaNum" style="margin-left: 20px;" th:text="${qIndex.index + 1}"></span>
+                                    </td>
+                                    <td class="bl_TBList__ttl">
+                                        <a th:href="|qnaDetail?qnaCode=${ qna.qnaCode }|" th:text="${qna.qnaTitle}" class="hp_ellipsis"></a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li class="bl_tabWrap">
+                        <button type="button" class="bl_tabBtn">배송/반품</button>
+                        <div class="bl_tabCont">
+                            <table class="bl_TBList bl_TBList__qna">
+                                <caption class="WA">검색</caption>
+                                <colgroup>
+                                    <col style="width:70px" />
+                                </colgroup>
+                                <tbody>
+                                <tr th:each="qna, qIndex : ${qnaList}" th:if="${qna.askCategoryCode == 3}">
+                                    <td>
+                                        <span class="bl_TBList__qnaNum" style="margin-left: 20px;" th:text="${qIndex.index + 1}"></span>
+                                    </td>
+                                    <td class="bl_TBList__ttl">
+                                        <a th:href="|qnaDetail?qnaCode=${ qna.qnaCode }|" th:text="${qna.qnaTitle}" class="hp_ellipsis"></a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li class="bl_tabWrap">
+                        <button type="button" class="bl_tabBtn">취소/교환/환불</button>
+                        <div class="bl_tabCont">
+                            <table class="bl_TBList bl_TBList__qna">
+                                <caption class="WA">검색</caption>
+                                <colgroup>
+                                    <col style="width:70px" />
+                                </colgroup>
+                                <tbody>
+                                <tr th:each="qna, qIndex : ${qnaList}" th:if="${qna.askCategoryCode == 4}">
+                                    <td>
+                                        <span class="bl_TBList__qnaNum" style="margin-left: 20px;" th:text="${qIndex.index + 1}"></span>
+                                    </td>
+                                    <td class="bl_TBList__ttl">
+                                        <a th:href="|qnaDetail?qnaCode=${ qna.qnaCode }|" th:text="${qna.qnaTitle}" class="hp_ellipsis"></a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li class="bl_tabWrap">
+                        <button type="button" class="bl_tabBtn">서비스/기타</button>
+                        <div class="bl_tabCont">
+                            <table class="bl_TBList bl_TBList__qna">
+                                <caption class="WA">검색</caption>
+                                <colgroup>
+                                    <col style="width:70px" />
+                                </colgroup>
+                                <tbody>
+                                <tr th:each="qna, qIndex : ${qnaList}" th:if="${qna.askCategoryCode == 5}">
+                                    <td>
+                                        <span class="bl_TBList__qnaNum" style="margin-left: 20px;" th:text="${qIndex.index + 1}"></span>
+                                    </td>
+                                    <td class="bl_TBList__ttl">
+                                        <a th:href="|qnaDetail?qnaCode=${ qna.qnaCode }|" th:text="${qna.qnaTitle}" class="hp_ellipsis"></a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <th:block th:replace="/user/common/footer.html"></th:block>
+</div>
+</body>
+<script>
+    // 각 카테고리별로 번호를 순차적으로 매기는 함수
+    function assignNumbersByCategory() {
+        // 각 카테고리별로 테이블 요소를 가져옴
+        const tables = document.querySelectorAll('.bl_tabCont table');
+
+        // 각 카테고리별로 순회
+        tables.forEach(function(table) {
+            const rows = table.querySelectorAll('tbody tr'); // 각 테이블의 행들을 가져옴
+            let rowNum = 1; // 번호 초기값 설정
+
+            // 각 행별로 번호를 매김
+            rows.forEach(function(row) {
+                const numCell = row.querySelector('.bl_TBList__qnaNum'); // 번호가 들어갈 셀을 가져옴
+                if (numCell) {
+                    numCell.textContent = rowNum++; // 순차적인 번호를 셀에 설정하고 rowNum 증가
+                }
+            });
+        });
+    }
+
+    // 페이지 로드 시 각 카테고리별로 번호를 매기는 함수 호출
+    window.addEventListener('DOMContentLoaded', function() {
+        assignNumbersByCategory();
+    });
+</script>
+</html>

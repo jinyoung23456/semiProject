@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <th:block th:replace="/user/common/head.html"></th:block>
+    <link rel="stylesheet" href="/user/css/product.css"/>
+    <style>
+        .bl_head {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #ffffff;
+            z-index: 9999;
+        }
+
+        .bl_foot {
+            margin-top: 100px;
+            position: relative;
+            background-color: #ffffff;
+            z-index: 9999;
+        }
+
+    </style>
+</head>
+
+<body>
+<div class="ly_all bl_all">
+    <th:block th:replace="/user/common/header.html"></th:block>
+    <div class="ly_maxWD ly_inner02">
+        <h2 class="el_lv1Head">전체보기</h2>
+        <ul class="bl_pdCategory ly_midWD ly_spaceBetween">
+            <li class="bl_pdCategory__cont">
+                <a class="bl_pdCategory__btn" href="/user/product/productListJungsung?category=2" >정성도시락</a>
+            </li>
+            <li class="bl_pdCategory__cont">
+                <a class="bl_pdCategory__btn" href="/user/product/productListHel">건강도시락</a>
+            </li>
+            <li class="bl_pdCategory__cont">
+                <a class="bl_pdCategory__btn" href="">맞춤도시락</a>
+            </li>
+            <li class="bl_pdCategory__cont">
+                <a class="bl_pdCategory__btn" href="/user/product/productListComp">간편식</a>
+            </li>
+        </ul>
+        <form action="/user/product/productView" method="get">
+            <ul class="bl_pdList ly_flex ly_flexWrap hp_mt70">
+                <th:block th:each="productList : ${productList}">
+                    <li class="bl_pdList__wrap">
+                        <a class="bl_pdList__cont"  th:href="@{'/user/product/productView?productCode=' + ${productList.productCode}}">
+                            <img class="bl_pdList__img"  alt=""/>
+                            <h3 class="bl_pdList__ttl hp_ellipsis" th:text="${productList.productName}"></h3>
+                            <p class="bl_pdList__txt hp_ellipsis hp_ellipsis2" th:text="${productList.productSummary}"></p>
+                            <p class="bl_pdList__price" th:text="${productList.productPrice} + '원'"></p>
+                            <input type="hidden" name="productCode" th:value="${productList.productCode}"/>
+                        </a>
+                    </li>
+                </th:block>
+            </ul>
+        </form>
+        <ul class="bl_paging hp_mt70">
+            <li><a class="bl_pagingIcon__prev" href=""><p class="WA">이전 페이지로</p></a></li>
+            <li><a class="hp_active" href="">1</a></li>
+            <li><a class="" href="">2</a></li>
+            <li><a class="" href="">3</a></li>
+            <li><a class="" href="">4</a></li>
+            <li><a class="" href="">5</a></li>
+            <li><a class="bl_pagingIcon__next" href=""><p class="WA">다음 페이지로</p></a></li>
+        </ul>
+    </div>
+    <th:block th:replace="/user/common/footer.html"></th:block>
+</div>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>공지사항 상세페이지</title>
+    <th:block th:replace="/admin/common/head.html"></th:block>
+</head>
+<body class="sb-nav-fixed">
+<th:block th:replace="/admin/common/header.html"></th:block>
+<div id="layoutSidenav">
+    <th:block th:replace="/admin/common/sideNav.html"></th:block>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h2 class="mt-4">공지사항 수정페이지</h2>
+                <form th:action="|/admin/customer/noticeUpdate/${ notice.noticeCode }|" method="post">
+                    <table class="datatable-table mt-4">
+                        <colgroup>
+                            <col style="width:15%"/>
+                        </colgroup>
+                        <tbody>
+                        <!-- 원래 등록된 글 클릭해서 입장시 -->
+                        <tr>
+                            <th scope="row">공지코드</th>
+                            <td><p th:text="${ notice.noticeCode }"></p></td>
+                            <th scope="row">관리자아이디</th>
+                            <td><p th:text="${ notice.adminId }"></p></td>
+                        </tr>
+                        <!-- 등록하기 클릭해서 입장시 -->
+                        <tr>
+                            <th scope="row">공지날짜</th>
+                            <td colspan="3"><p th:text="${ notice.noticeDate }"></p></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">공지제목</th>
+                            <td colspan="3">
+                                <label>
+                                    <input name="noticeTitle" style="width: 700px" type="text" th:value="${ notice.noticeTitle }">
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">공지내용</th>
+                            <td colspan="3">
+                                <label>
+                                    <textarea name="noticeContent" style="width: 700px; height: 500px;" th:utext="${ notice.noticeContent }"></textarea>
+                                </label>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="editBtn text-end">
+                        <input type="hidden" name="noticeCode" th:value="${ notice.noticeCode }">
+                        <button type="submit" class="btn btn-secondary">등록</button>
+                        <button type="button" class="btn btn-secondary" onclick="location.href='/admin/customer/noticeList'">목록</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+</div>
+<th:block th:replace="/admin/common/foot.html"></th:block>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="/js/scripts.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+<script src="/js/datatables-simple-demo.js"></script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>1대1 문의내역</title>
+    <th:block th:replace="~{/user/common/head.html}"></th:block>
+</head>
+<body>
+<th:block th:replace="~{/user/common/header.html}"></th:block>
+<div class="ly_all bl_all">
+    <div class="bl_sideMenuBack">
+        <div class="ly_maxWD ly_flex">
+            <th:block th:replace="~{/user/customer/sideMenu.html}"></th:block>
+            <div class="ly_inner02 ly_fgrow1 hp_fBack ly_midWDside">
+                <div class="ly_midWDside">
+                    <h2 class="el_lv1Head">1:1 문의내역</h2>
+                    <table class="bl_TBView hp_mt50">
+                        <caption class="WA">검색</caption>
+                        <colgroup>
+                            <col style="width:150px"/>
+                            <col style="width:*"/>
+                        </colgroup>
+                        <tbody th:each="ask : ${ askList }">
+                        <tr>
+                            <th scope="row">분류</th>
+                            <td th:text="${ ask.askCategoryDTO.askCategoryName }"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">제목</th>
+                            <td th:text="${ ask.askTitle }"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="height: 200px;">문의내용</th>
+                            <td>
+                                <pre th:text="${ ask.askContent }"></pre>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="height: 200px;">답변내용</th>
+                            <td>
+                                <!-- 답변 있을 시 -->
+                                <div th:if="${ ask.answerDTO != null }">
+                                    <pre th:text="${ ask.answerDTO.answerContent }"></pre>
+                                </div>
+                                <!-- 답변 없을 시 -->
+                                <div th:if="${ ask.answerDTO == null }">
+                                    <span>답변 등록 전입니다.</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">첨부파일</th>
+                            <td colspan="3">
+                                <div style="display: flex;">
+                                    <div th:each="image : ${imageList}" style="margin-right: 20px;">
+                                        <img th:src="@{|/file/${image.savedName}|}" th:alt="${image.savedName}" style="max-width: 100px; max-height: 100px;">
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <!-- 답변 있을 경우 -->
+                    <div th:if="${ askList.answerDTO != null }">
+                        <ul class="ly_flexC hp_mt70">
+                            <li><a class="el_btnM hp_br5 el_btnPointBack" href="/user/customer/askList">목록</a></li>
+                        </ul>
+                    </div>
+                    <!-- 답변 없을 경우 -->
+                    <div th:if="${ askList.answerDTO == null }">
+                        <ul class="ly_flexC hp_mt70">
+                            <li><a class="el_btnM hp_br5 el_btnPointBack" href="/user/customer/askList">목록</a></li>
+                            <li><a class="el_btnM hp_br5 el_btnPointBack hp_ml10" th:onclick="'location.href=\'/user/customer/askEdit/' + ${askList.askCode} + '\''">수정</a></li>
+                            <li>
+                                <form action="askDelete" method="GET" onsubmit="return delete_event()" class="el_btnM hp_br5 el_btn8Bord hp_ml10">
+                                    <input type="hidden" name="askCode" th:value="${ askList.askCode }" />
+                                    <button type="submit" class="btn btn-secondary btn-sm">삭제</button>
+                                    <script type="text/javascript">
+                                        function delete_event() {
+                                            if(confirm("정말 삭제하시겠습니까?") === true) {
+                                                return true;
+                                            } else {
+                                                return false;
+                                            }
+                                        }
+                                    </script>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <th:block th:replace="/user/common/footer.html"></th:block>
+    </div>
+</body>
+</html>

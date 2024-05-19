@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <th:block th:replace="/admin/common/head.html"></th:block>
+</head>
+<body class="sb-nav-fixed">
+<th:block th:replace="/admin/common/header.html"></th:block>
+<!-- navbar -->
+<div id="layoutSidenav">
+    <th:block th:replace="/admin/common/sideNav.html"></th:block>
+    <!-- layoutSidenav_nav -->
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">환불 상세보기</h1>
+                <table class="datatable-table mt-4">
+                    <colgroup>
+                        <col style="width:200px"/>
+                        <col style="width:*%"/>
+                        <col style="width:200px"/>
+                        <col style="width:*%"/>
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <th scope="row">환불코드</th>
+                        <td th:text="${ refundView.refundStatus }"></td>
+                        <th scope="row">환불사유</th>
+                        <td th:text="${ refundView.refundReason }"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">주문코드</th>
+                        <td th:text="${ refundView.orderCode }"></td>
+                        <th scope="row">회원이름(회원아이디)</th>
+                        <td th:text="|${ refundView.member.name }(${ refundView.member.id })|"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">환불날짜</th>
+                        <td th:text="${ refundView.refundDate }"></td>
+                        <th scope="row">환불상태</th>
+                        <td th:text="${ refundView.refundStatus }"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">결제방법</th>
+                        <td colspan="3" th:text="${ refundView.pay.payMethod }"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">이미지파일</th>
+                        <td colspan="3">
+                            <!--                            <img src="/img/review/review.jpg" alt=""/>-->
+                            <!--                            <img src="/img/review/review.jpg" alt=""/>-->
+                            <!--                            <img src="/img/review/review.jpg" alt=""/>-->
+                            <!--                            <img src="/img/review/review.jpg" alt=""/>-->
+                            <!--                            <img src="/img/review/review.jpg" alt=""/>-->
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">환불금액</th>
+                        <td colspan="3">
+                            <div class="justify-content-between d-flex align-items-center">
+                                <p>총 결제금액</p>
+                                <p th:text="${ refundView.pay.payPrice } + ' 원'"></p>
+                            </div>
+                            <!--                            <div class="justify-content-between d-flex align-items-center">-->
+                            <!--                                <p>배송비</p>-->
+                            <!--                                <p>123,456원</p>-->
+                            <!--                            </div>-->
+                            <div class="justify-content-between d-flex align-items-center">
+                                <p class="text-primary fw-bold">총 환불금액</p>
+                                <p class="text-primary fw-bold" th:text="${ refundView.pay.payPrice } + ' 원'"></p>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="editBtn" style="text-align: right;">
+                    <button type="button" class="btn btn-primary">승인</button>
+                    <button type="button" class="btn btn-secondary">거절</button>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<th:block th:replace="admin/common/foot.html"></th:block>
+</body>
+</html>

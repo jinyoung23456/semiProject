@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <th:block th:replace="/admin/common/head.html"></th:block>
+        <title>리뷰 상세보기</title>
+        <script>
+            const message = '[[${message}]]';
+            message && alert(message);
+
+            $(function(){
+                $(".adminReviewDeleteButton").click(function(){
+                    const reviewCode = new URL(location.href).searchParams.get("reviewCode");
+                    location.href = "/admin/review/reviewDelete?reviewCode="+reviewCode;
+                })
+                $("textarea").on("propertychange change keyup paste input", function() {
+                    $(".reviewAnswerRegistBtn").attr("disabled", false);
+
+                    console.log($(this).val());
+                })
+
+            })
+        </script>
+    </head>
+    <body class="sb-nav-fixed">
+    <th:block th:replace="/admin/common/header.html"></th:block>
+        <div id="layoutSidenav">
+            <th:block th:replace="/admin/common/sideNav.html"></th:block>
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4">리뷰 상세보기</h1>
+                        <form action="/admin/review/reviewAnswerRegist" method="post">
+                            <input type="hidden" th:value="${ reviewDTO.reviewCode }" name="reviewCode"/>
+                        <table class="datatable-table mt-4">
+                            <colgroup>
+                                <col style="width:200px"/>
+                                <col style="width:*%"/>
+                                <col style="width:200px"/>
+                                <col style="width:*%"/>
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th scope="row">리뷰코드</th>
+                                <td th:text="${ reviewDTO.reviewCode }"></td>
+                                <th scope="row">주문상세코드</th>
+                                <td th:text="${ reviewDTO.detailCode }"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">회원아이디</th>
+                                <td th:text="${ reviewDTO.userId }"></td>
+                                <th scope="row">리뷰날짜</th>
+                                <td th:text="${ reviewDTO.reviewDate }"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">상품명</th>
+                                <td colspan="3" th:text="${ reviewDTO.productName }"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">리뷰제목</th>
+                                <td colspan="3" th:text="${ reviewDTO.reviewTitle }"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">리뷰내용</th>
+                                <td colspan="3" th:text="${ reviewDTO.reviewContent }"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">이미지파일</th>
+                                <td colspan="3">
+                                    <div th:each="image : ${imageList}" style="margin-right: 20px;">
+                                        <img th:src="@{/reviewUpload/original/{fileName}(fileName=${image.savedName})}"
+                                             alt="이미지 파일 이름: [[${image.savedName}]]"
+                                             style="max-width: 100px; max-height: 100px;">
+                                    </div>
+                                </td>
+                            </tr>
+                            <th:block th:if="${ reviewDTO.reviewDelete == 'N' }">
+                                <th:block th:if="${ reviewDTO.answerStatus == false }">
+                                    <tr>
+                                        <th scope="row"><label for="">답변내용</label></th>
+                                        <td colspan="3"><textarea name="answerContent" style="width:100%;min-height:150px;"></textarea></td>
+                                    </tr>
+                                </th:block>
+
+                                <th:block th:if="${ reviewDTO.answerStatus == true }">
+                                    <tr>
+                                        <th scope="row">답변코드</th>
+                                        <td th:text="${reviewDTO.answerCode}"></td>
+                                        <th scope="row">답변날짜</th>
+                                        <td th:text="${reviewDTO.answerDate}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">관리자아이디</th>
+                                        <td colspan="3" th:text="${reviewDTO.adminId}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">답변내용</th>
+                                        <td colspan="3" th:text="${reviewDTO.answerContent}"></td>
+                                    </tr>
+                                </th:block>
+                            </th:block>
+                            </tbody>
+                        </table>
+                        <th:block th:if="${ reviewDTO.reviewDelete == 'N' }">
+                            <th:block th:if="${ reviewDTO.answerStatus == false }">
+                                <div class="editBtn text-end">
+                                    <button type="submit" class="btn btn-primary reviewAnswerRegistBtn" disabled>답변등록</button>
+                                    <button type="button" class="btn btn-secondary adminReviewDeleteButton">리뷰삭제</button>
+                                </div>
+                            </th:block>
+                        </th:block>
+                        </form>
+                    </div>
+                </main>
+            </div>
+        </div>
+    <th:block th:replace="/admin/common/foot.html"></th:block>
+    </body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>아이디찾기</title>
+    <th:block th:replace="/user/common/head.html"></th:block>
+</head>
+<body>
+<div class="ly_all bl_all">
+    <th:block th:replace="/user/common/header.html"></th:block>
+    <div class="ly_midWD ly_inner02">
+        <h2 class="el_lv1Head">아이디 찾기</h2>
+        <div class="hp_bordDE hp_padding70 hp_mt50">
+            <div class="hp_alignC hp_fs16">
+                <span class="hp_fw700 hp_pointColor" th:text="${findIdMem.name}"></span>님의 정보로 가입된 계정입니다.
+                <ul>
+                    <li class="hp_mt30">아이디 : <span th:text="${findIdMem.id}" class="hp_fw700 hp_pointColor"></span></li>
+                    <li class="hp_fs13 hp_7Color hp_mt5">가입일 : <span th:text="${findIdMem.joindate}"></span></li>
+                </ul>
+            </div>
+            <div class="ly_flex hp_mt50">
+                <a class="el_btnM hp_br5 el_btnPointBack hp_w100" href="/login">로그인</a>
+                <a class="el_btnM hp_br5 el_btnPointBord hp_w100 hp_ml10" href="/user/login/findPWD">비밀번호 찾기</a>
+            </div>
+        </div>
+    </div>
+    <th:block th:replace="/user/common/footer.html"></th:block>
+</div>
+</body>
+</html>

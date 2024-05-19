@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <th:block th:replace="/user/common/head.html"></th:block>
+    <style>
+        .editBtn{display: none;}
+    </style>
+    <script>
+        const message = '[[${message}]]';
+        message && alert(message);
+
+        $(function(){
+            $("input, textarea").on("propertychange change keyup paste input", function() {
+                $(".editBtn").show();
+            })
+
+            $(".deleteBtn").click(function (){
+                alert("삭제한 리뷰는 복구할 수 없으며 주문상품에 대해 다시 리뷰를 적으실 수 없습니다.")
+                const reviewUrl = new URL(location.href).searchParams.get("reviewCode");
+                location.href = "/user/review/userReviewDelete?reviewCode="+reviewUrl;
+            })
+        })
+    </script>
+</head>
+<body>
+    <div class="ly_all bl_all">
+        <th:block th:replace="/user/common/header.html"></th:block>
+        <div class="bl_sideMenuBack">
+            <div class="ly_maxWD ly_flex">
+                <th:block th:replace="/user/common/sideMenu.html"></th:block>
+                <div class="ly_inner02 ly_fgrow1 hp_fBack">
+                    <div class="ly_midWDside">
+                        <h2 class="el_lv1Head">리뷰보기</h2>
+                        <form action="/user/review/userReviewEdit" method="post">
+                        <input type="hidden" name="reviewCode" th:value="${myReview.reviewCode}"/>
+                        <table class="bl_TBView hp_mt50">
+                            <caption class="WA">검색</caption>
+                            <colgroup>
+                                <col style="width:150px"/>
+                                <col style="width:*"/>
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">리뷰제목</th>
+                                    <td>
+                                        <div th:if="${ myReview.answerContent != null }">
+                                            <div th:text="${myReview.reviewTitle}"></div>
+                                        </div>
+                                        <div th:if="${ myReview.answerContent == null }">
+                                            <input class="hp_w100" type="text" name="reviewTitle" th:value="${myReview.reviewTitle}"/>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">리뷰내용</th>
+                                    <td>
+                                        <div th:if="${ myReview.answerContent != null }">
+                                            <div th:text="${myReview.reviewContent}"></div>
+                                        </div>
+                                        <div th:if="${ myReview.answerContent == null }">
+                                            <textarea style="min-height:500px;" name="reviewContent" th:text="${myReview.reviewContent}"></textarea>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr th:if="${ myReview.answerContent != null }">
+                                    <th scope="row">답변내용</th>
+                                    <td th:text="${myReview.answerContent}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">첨부파일</th>
+                                    <td>
+                                        <div th:each="image : ${imageList}" style="margin-right: 20px;">
+                                            <img th:src="@{/reviewUpload/original/{fileName}(fileName=${image.savedName})}"
+                                                 alt="이미지 파일 이름 : [[${image.savedName}]]"
+                                                 style="max-width: 100px; max-height: 100px;">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <ul class="ly_flexC hp_mt70">
+                            <li><a class="el_btnM hp_br5 el_btn8Back" href="/user/review/list">목록</a></li>
+                            <li><button type="submit" class="el_btnM hp_br5 el_btnPointBord hp_ml10 editBtn">수정</button></li>
+                            <li><button type="button" class="el_btnM hp_br5 el_btn8Bord hp_ml10 deleteBtn">삭제</button></li>
+                        </ul>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <th:block th:replace="/user/common/footer.html"></th:block>
+    </div>
+</body>
+</html>

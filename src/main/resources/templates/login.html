@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>로그인</title>
+    <th:block th:replace="/user/common/head.html"></th:block>
+    <script>
+        const message = '[[${message}]]';
+        message && alert(message);
+    </script>
+</head>
+<body>
+    <div class="ly_all bl_all">
+        <th:block th:replace="/user/common/header.html"></th:block>
+        <div class="ly_midWD ly_inner02">
+            <h2 class="el_lv1Head">로그인</h2>
+            <div class="hp_bordDE hp_padding70 hp_mt50">
+                <form th:action="@{/login}" th:method="post">
+                    <input type="text" class="el_btnM hp_inputBack hp_w100" name="id" value="" placeholder="아이디를 입력해주세요"/>
+                    <input type="password" class="el_btnM hp_inputBack hp_w100 hp_mt10" name="pwd" value="" placeholder="비밀번호를 입력해주세요"/>
+                    <ul class="ly_flexEnd hp_mt10">
+                        <li><a class="" href="/user/login/findID">아이디 찾기</a></li>
+                        <li class="hp_ml10 hp_mr10">|</li>
+                        <li><a class="" href="/user/login/findPWD">비밀번호 찾기</a></li>
+                    </ul>
+                    <button type="submit" class="el_btnM el_btnPointBack hp_w100 hp_br5 hp_mt40">로그인</button>
+                </form>
+                <div class="hp_bordDashTDE2 hp_mt50 hp_pt50 hp_alignC">
+                    <p class="hp_fw700 hp_fs16 hp_mb5">아직 회원이 아니라면?</p>
+                    도시락과 함께 다양한 식단을 즐겨보세요.
+                </div>
+                <a class="el_btnM el_btnPointBord hp_w100 hp_br5 hp_mt40" href="/user/join/join01">회원가입</a>
+            </div>
+            <!-- 임시 -->
+            <a class="hp_fColor" href="/admin/member/join">관리자 회원가입</a>
+        </div>
+        <th:block th:replace="~{/user/common/footer.html}"></th:block>
+    </div>
+</body>
+</html>

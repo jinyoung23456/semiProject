@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <th:block th:replace="/user/common/head.html"></th:block>
+    <link rel="stylesheet" href="/user/css/survey.css">
+</head>
+
+<body>
+<div class="ly_all bl_all">
+    <th:block th:replace="/user/common/header.html"></th:block>
+<div class="ly_midWD ly_inner02"> <!-- 결과창 -->
+    <div class="result-main-layout">
+        <div class="name-block">
+            [이름] 님의 설문 결과
+        </div>
+        <div class="result-block">
+            <div class="result-flex-block">
+                <div class="half-info-box">남성</div>
+                <div class="half-info-box">25세</div>
+            </div>
+            <div class="result-flex-block">
+                <div class="half-info-box">175cm/75kg</div>
+                <div class="half-info-box">BMI: 24(예상)</div>
+            </div>
+            <div class="result-info-box">희망 식단: 체중 감량</div>
+            <button class="el_btnPointBack fix-info-button">기본 정보 수정</button>
+        </div>
+        <div class="result-block">
+            <dl class="" style="position:relative;">
+                <dt class=""
+                    style="background:#fff;padding:15px 0;font-size:18px;border-radius:10px;border-bottom-left-radius:0;border-bottom-right-radius:0;">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis, aliquid!
+                </dt>
+                <dd class=""
+                    style="background:url(../img/img01.jpg)no-repeat center/cover;padding:30px 0;border-radius:10px;border-top-left-radius:0;border-top-right-radius:0;min-height:500px;opacity:0.2;">
+                </dd>
+                <dd class="" style="position:absolute;
+                    top:50%;
+                    left:50%;
+                    transform:translateX(-50%);
+                    width:80%;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt dolor at est esse
+                    quidem quae commodi temporibus labore. Laboriosam molestiae reiciendis atque rerum minima et
+                    necessitatibus impedit molestias ab exercitationem.</dd>
+            </dl>
+        </div>
+    </div>
+</div>
+    <th:block th:replace="/user/common/footer.html"></th:block>
+</div>
+</body>
+
+</html>

@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ohgiraffers.dosirak.admin.order.model.dao.OrderMapper">
+
+    <!-- MemberDTO Mapping -->
+    <resultMap id="memberResultMap" type="com.ohgiraffers.dosirak.admin.member.model.dto.MemberDTO">
+        <id property="id" column="ID"/>
+        <result property="name" column="NAME"/>
+        <result property="phone" column="PHONE"/>
+        <result property="address1" column="ADDRESS1"/>
+        <result property="address2" column="ADDRESS2"/>
+        <result property="address3" column="ADDRESS3"/>
+    </resultMap>
+
+    <!-- PayDTO Mapping -->
+    <resultMap id="payResultMap" type="com.ohgiraffers.dosirak.admin.order.model.dto.PayDTO">
+        <result property="payPrice" column="pay_price"/>
+        <result property="payDate" column="pay_date"/>
+        <result property="payStatus" column="pay_status"/>
+        <result property="payMethod" column="pay_method"/>
+        <result property="orderCode" column="order_code"/>
+    </resultMap>
+
+    <!-- DetailDTO Mapping -->
+    <resultMap id="detailResultMap" type="com.ohgiraffers.dosirak.admin.order.model.dto.DetailDTO">
+        <result property="orderCode" column="order_code"/>
+        <result property="detailCode" column="detail_code"/>
+        <result property="detailStatus" column="detail_status"/>
+        <result property="detailItemCount" column="detailitem_count"/>
+        <result property="ProductCode" column="product_code"/>
+        <result property="SuitboxCode" column="suitbox_code"/>
+        <association property="product" resultMap="productResultMap"/>
+    </resultMap>
+
+    <!-- OrderDTO Mapping -->
+    <resultMap id="orderResultMap" type="com.ohgiraffers.dosirak.admin.order.model.dto.OrderDTO">
+        <id property="orderCode" column="order_code"/>
+        <result property="orderStatus" column="order_status"/>
+        <result property="orderAddress1" column="order_address1"/>
+        <result property="orderAddress2" column="order_address2"/>
+        <result property="orderAddress3" column="order_address3"/>
+        <result property="orderRecipient" column="order_recipient"/>
+        <result property="orderContact" column="order_contact"/>
+        <association property="member" resultMap="memberResultMap"/>
+        <association property="refund" resultMap="refundResultMap"/>
+        <association property="pay" resultMap="payResultMap"/>
+        <association property="detail" resultMap="detailResultMap"/>
+    </resultMap>
+
+    <!-- RefundDTO Mapping -->
+    <resultMap id="refundResultMap" type="com.ohgiraffers.dosirak.admin.order.model.dto.RefundDTO">
+        <id property="refundCode" column="refund_code"/>
+        <result property="refundPrice" column="refund_price"/>
+        <result property="refundDate" column="refund_date"/>
+        <result property="refundStatus" column="refund_status"/>
+        <result property="refundReason" column="refund_reason"/>
+        <result property="orderCode" column="order_code"/>
+        <association property="member" resultMap="memberResultMap"/>
+        <association property="pay" resultMap="payResultMap"/>
+    </resultMap>
+
+    <!-- DeliveryDTO Mapping -->
+    <resultMap id="deliveryResultMap" type="com.ohgiraffers.dosirak.admin.order.model.dto.DeliveryDTO">
+        <result property="deliveryCode" column="delivery_code"/>
+        <result property="deliveryStatus" column="delivery_status"/>
+        <association property="member" resultMap="memberResultMap"/>
+        <association property="order" resultMap="orderResultMap"/>
+    </resultMap>
+
+    <!-- ProductDTO Mapping -->
+    <resultMap id="productResultMap" type="com.ohgiraffers.dosirak.admin.product.dto.productDTO">
+        <id property="productCode" column="product_code"/>
+        <result property="productName" column="product_name"/>
+        <result property="productPrice" column="product_price"/>
+    </resultMap>
+
+    <!-- OrderList Query -->
+    <select id="allOrderLists" resultMap="orderResultMap">
+        SELECT
+        o.order_code,
+        o.order_recipient,
+        o.order_status,
+        u.id,
+        u.name,
+        p.pay_price,
+        p.pay_date,
+        p.pay_status,
+        p.pay_method
+        FROM
+        `order` o
+        JOIN user u ON u.id = o.id
+        JOIN pay p ON p.order_code = o.order_code
+    </select>
+
+    <!-- RefundList Query -->
+    <select id="allRefundList" resultMap="refundResultMap">
+        SELECT
+        r.order_code,
+        r.refund_price,
+        r.refund_date,
+        r.refund_status,
+        u.ID,
+        u.NAME,
+        p.pay_method
+        FROM
+        refund r
+        JOIN `order` o ON r.order_code = o.order_code
+        JOIN pay p ON r.order_code = p.order_code
+        JOIN user u ON o.ID = u.ID
+    </select>
+
+    <!-- DeliveryList Query -->
+    <select id="allDeliveryList" resultMap="deliveryResultMap">
+        SELECT
+        d.order_code,
+        d.delivery_code,
+        d.delivery_status,
+        o.order_recipient,
+        u.name
+        FROM
+        delivery d
+        JOIN `order` o ON d.order_code = o.order_code
+        JOIN user u ON o.id = u.id
+    </select>
+
+    <!-- OrderView Query -->
+    <select id="allOrderView" resultMap="orderResultMap">
+        SELECT
+        dt.detail_code,
+        dt.detail_status,
+        pd.product_name,
+        pd.product_price,
+        dt.detailitem_count,
+        o.order_code,
+        o.order_status,
+        r.refund_status,
+        u.name,
+        u.id,
+        o.order_recipient,
+        CONCAT(CONCAT(SUBSTRING(u.phone, 1, 3), '-'), CONCAT(SUBSTRING(u.phone, 4, 4), '-'), SUBSTRING(u.phone, 8, 4)) as phone,
+        u.address1,
+        u.address2,
+        u.address3,
+        o.order_address1,
+        o.order_address2,
+        o.order_address3,
+        o.order_contact,
+        p.pay_price,
+        p.pay_date,
+        p.pay_method
+        FROM
+        `order` o
+        JOIN detail dt ON o.order_code = dt.order_code
+        LEFT JOIN refund r ON o.order_code = r.order_code
+        JOIN delivery d ON o.order_code = d.order_code
+        JOIN user u ON o.ID = u.ID
+        JOIN pay p ON o.order_code = p.order_code
+        JOIN tbl_product pd ON dt.product_code = pd.product_code
+        WHERE
+        dt.order_code = #{ orderCode }
+    </select>
+
+    <!-- 에러 -->
+    <!--    <select id="searchDetail" resultMap="detailResultMap">-->
+    <!--        SELECT-->
+    <!--            d.detail_status,-->
+    <!--            d.detailitem_count,-->
+    <!--            p.product_price-->
+    <!--        FROM-->
+    <!--            detail d-->
+    <!--        JOIN `order` o ON d.order_code = o.order_code-->
+    <!--        JOIN product p ON d.detailitem_product_code = p.product_code-->
+    <!--    </select>-->
+
+    <!-- RefundView Query -->
+    <select id="allRefundView" resultMap="refundResultMap">
+        SELECT
+        r.refund_code,
+        r.refund_reason,
+        o.order_code,
+        u.name,
+        u.id,
+        r.refund_date,
+        r.refund_status,
+        p.pay_method,
+        p.pay_price,
+        r.refund_price
+        FROM
+        refund r
+        JOIN `order` o ON r.order_code = o.order_code
+        JOIN user u ON o.id = u.id
+        JOIN pay p ON o.order_code = p.order_code
+        WHERE
+        r.order_code = #{ orderCode }
+    </select>
+
+    <!-- DeliveryView Query -->
+    <select id="allDeliveryView" resultMap="deliveryResultMap">
+        SELECT
+        o.order_code,
+        d.delivery_code,
+        d.delivery_status,
+        u.name,
+        u.id,
+        o.order_recipient,
+        o.order_contact,
+        u.phone,
+        o.order_address1,
+        o.order_address2,
+        o.order_address3,
+        u.address1,
+        u.address2,
+        u.address3
+        FROM
+        delivery d
+        JOIN `order` o ON d.order_code = o.order_code
+        JOIN user u ON o.id = u.id
+        WHERE
+        d.order_code = #{ orderCode }
+    </select>
+
+    <!-- UpdateOrderStatus Query -->
+    <update id="updateOrderStatus" parameterType="list">
+        UPDATE
+        `order` o
+        JOIN detail d ON o.order_code = d.order_code
+        SET
+        d.detail_status = 'X'
+        WHERE
+        d.detail_code IN
+        <foreach collection="detailCode" item="code" open="(" separator="," close=")">
+            #{code}
+        </foreach>
+    </update>
+</mapper>

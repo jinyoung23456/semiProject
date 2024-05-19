@@ -1,0 +1,23 @@
+.blind {overflow: hidden; position: absolute; width: 1px; height: 1px; font-size: 12px; clip: rect(1px, 1px, 1px, 1px);}
+.container {margin: 0 auto;}
+.container a {text-decoration: none; color: inherit;}
+.container a:focus {outline: 0px dashed #999;}
+
+.container .item-box .item-img {display: flex; margin-bottom: 20px;}
+.container .item-box .item-img a {display: block; border-radius: 10px; width: 50px; margin-right:10px;}
+.container .item-box .item-img a:nth-child(2n + 2) {margin-left: px;}
+.container .item-box .item-img a img {display: block; width: 100%;}
+
+.container .img-popup {position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); visibility: hidden; opacity: 0; transition: all 0.3s; z-index: 10000;}
+.container .img-popup.active {visibility: visible; opacity: 1;}
+.container .img-popup .popup-inner {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 900px;}
+.container .img-popup .popup-inner > img {display: block; width: 100%; margin: 0 auto;}
+/* .container .img-popup .popup-inner .close-btn {display: flex; display: -webkit-flex; display: -ms-flexbox; position: absolute; top: -36px; left: 50%; transform: translateX(-50%); width: 70px; height: 70px; border-radius: 50%; background-color: #1eb9b2; justify-content: center; align-items: center; color: #fff; font-size: 30px;} */
+.container .img-popup .popup-inner .close-btn i {transition: all 0.3s;}
+.container .img-popup .popup-inner .close-btn:hover i {transform: rotate(180deg);}
+
+@media (max-width:991px) {
+  .container .img-popup .popup-inner {width: 90%;}
+  .container .img-popup .popup-inner .close-btn {width: 50px; height: 50px; top: -26px;}
+  .container .img-popup .popup-inner .close-btn img {width: 20px;}
+}

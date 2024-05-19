@@ -1,0 +1,59 @@
+<header class="bl_head" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <div class="bl_header__wrap ly_maxWD ly_spaceBetween ly_fitemC ly_inner01">
+        <h1 class="bl_head__logo">
+            <a class="bl_head__logoBtn" href="/user/main" title="메인페이지로 이동">
+                <img src="/user/img/common/logo_main.png" alt="도시락 로고"/>
+            </a>
+        </h1>
+        <ul class="bl_head__menuC ly_flex">
+            <li><a class="bl_head__menuCitem hp_pointColor" href="/user/product/productList">전체보기</a></li>
+            <li><a class="bl_head__menuCitem hp_pointColor" href="/user/product/productListJungsung?category=2">정성도시락</a></li>
+            <li><a class="bl_head__menuCitem hp_pointColor" href="/user/product/productListHel?category=4&category=5&category=6&category=7">건강도시락</a></li>
+            <li><a class="bl_head__menuCitem hp_pointColor" href="/suit-box">맞춤도시락</a></li>
+            <li><a class="bl_head__menuCitem hp_pointColor" href="/user/product/productListComp?category=8&category=9">간편식</a></li>
+        </ul>
+        <ul class="bl_head__menuR ly_flex ly_fitemC">
+            <li class="hp_relative">
+                <th:block sec:authorize="isAnonymous()">
+                    <a href="/login" class="bl_headIcon bl_headIcon__mypage"><img src="/user/img/icon/header_myinfo.png" alt="로그인"></a>
+                </th:block>
+                <!-- 로그인후 : 마이페이지 메뉴 펼치기 -->
+                <th:block sec:authorize="isAuthenticated()">
+                    <a href="/logout" class="bl_headIcon bl_headIcon__logout"><img src="/user/img/icon/header_logout.png" alt="로그아웃"></a>
+                    <button type="button" class="bl_headIcon bl_headIcon__mypage hp_relative">
+                        <img src="/user/img/icon/header_myinfo.png" alt="마이페이지">
+                        <ul class="bl_head__menuSub">
+                            <li class=""><a class="" href="/user/myinfo/pwdCheck">나의정보</a></li>
+                            <li class=""><a class="" href="">주문내역</a></li>
+                            <li class=""><a class="" href="/user/review/list">리뷰내역</a></li>
+                            <li class=""><a class="" href="">나의설문</a></li>
+                        </ul>
+                    </button>
+                </th:block>
+            </li>
+            <li class=""><a class="bl_headIcon bl_headIcon__cart" href="/user/cart"><img src="/user/img/icon/header_cart.png" alt="장바구니"></a></li>
+            <li class="hp_relative">
+                <button type="button" class="bl_headIcon bl_headIcon__customer">
+                    <img src="/user/img/icon/header_customer.png" alt="고객센터" onclick="window.location.href='/user/customer/main'" style="cursor: pointer;">                    <ul class="bl_head__menuSub">
+                        <li class=""><a class="" href="/user/customer/noticeList">공지사항</a></li>
+                        <li class=""><a class="" href="/user/customer/qnaList">자주묻는질문</a></li>
+                        <li class=""><a class="" href="/user/customer/askRegist">1:1 문의하기</a></li>
+                        <li class=""><a class="" href="/user/customer/askList">1:1 문의내역</a></li>
+                    </ul>
+                </button>
+            </li>
+        </ul>
+    </div>
+</header>
+<script>
+    $(function(){
+        let isNone = $(".bl_headIcon + .bl_head__menuSub").css('display', 'none');
+
+        $(".bl_headIcon").mouseover(function(){
+            if(isNone) $(".bl_head__menuSub", this).css('display', 'block');
+        })
+        $(".bl_headIcon").mouseleave(function(){
+            $(".bl_head__menuSub", this).css('display', 'none');
+        })
+    })
+</script>

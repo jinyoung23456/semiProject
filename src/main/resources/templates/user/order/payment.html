@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주문결제</title>
+    <th:block th:replace="/user/common/head.html"></th:block>
+    <link rel="stylesheet" href="/user/css/order.css"/>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <style>
+        .none{width:100px;border:none;min-height:auto;}
+        .none:focus{background:none!important;}
+        .none:focus-visible{outline:none;}
+    </style>
+</head>
+<body>
+<div class="ly_all bl_all">
+    <th:block th:replace="/user/common/header.html"></th:block>
+    <div class="ly_maxWD ly_inner02">
+        <h2 class="el_lv1Head">주문 결제</h2>
+<!--        <form action="/user/orderDone" method="post" onsubmit="return payment();">-->
+        <form action="/user/orderDone" method="post" id="finish">
+        <table class="bl_TBView hp_mt50">
+            <caption class="WA">검색</caption>
+            <colgroup>
+                <col style="width:150px"/>
+                <col style="width:*"/>
+            </colgroup>
+            <tbody>
+            <tr>
+                <th scope="row">주문 상품</th>
+                <td>
+                    <ul class="js_productRow">
+                        <li class="ly_flex ly_fitemC getProductCode hp_mb15" th:each="cart : ${ cartList }">
+                            <input style="display: none" th:if="${cart.productCode != 0}"  th:name="|product${cart.productCode}|" th:value="${cart.productCode}">
+                            <input style="display: none" th:if="${cart.suitbox != null}" th:name="|suitbox${cart.suitbox.suitboxCode}|" th:value="${cart.suitbox.suitboxCode}">
+                            <img class="bl_orderView__img" th:if="${cart.productCode != 0}" th:src="${cart.savePath}" alt=""/>
+                            <img class="bl_orderView__img" th:if="${cart.suitbox != null}" src="/suitboxUpload/original/product01.jpg" alt=""/>
+                            <dl class="bl_orderView__info">
+                                <dt class="pay_productName" th:if="${cart.productCode != 0}" th:text="${cart.productName}"></dt>
+                                <dt class="pay_productName" th:if="${cart.suitbox != null}">맞춤 도시락 <span style="color: gray; margin-left: 20px"
+                                                                                                       th:text="|${cart.detailSuitBox.rice.getMenuName()}/${cart.detailSuitBox.main.getMenuName()}
+                                                                                                       /${cart.detailSuitBox.side.getMenuName()}/${cart.detailSuitBox.kimchi.getMenuName()}|">
+                                </span></dt>
+                                <dd class="hp_mt10" style="display: flex">
+                                    <div class="hp_ml10 hp_mr10 js_productPrice pay_productPrice" th:text="${cart.productPrice} + '원'"></div><span class="hp_ml5 hp_mr5">/</span>
+                                    <div class="hp_ml10 hp_mr10 js_productQuantity pay_productQuantity" th:text="${cart.cartitemCount} + '개'"></div><span class="hp_ml5 hp_mr5">/</span>
+                                    <div class="hp_ml10 hp_mr1 js_totalPrice" th:text="(${cart.productPrice * cart.cartitemCount}) + '원'"></div>
+                                </dd>
+                            </dl>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row"><label for="">배송받는 사람</label></th>
+                <td><input th:value="${user.name}" type="text" id="" class="el_btnM hp_inputBack hp_w100 pay_buyerName" name="name" placeholder="배송받는 사람의 이름 입력해주세요" title="이름 입력"/></td>
+            </tr>
+            <tr>
+                <th scope="row"><label for="">휴대폰번호</label></th>
+                <td><input th:value="${user.phone}" type="text" id="" class="el_btnM hp_inputBack hp_w100 pay_buyerTel" name="phone" placeholder="휴대폰번호를 입력해주세요" title="휴대폰번호 입력"/></td>
+            </tr>
+            <tr>
+                <th scope="row"><label for="">배송지</label></th>
+                <td>
+                    <div class="ly_flex">
+                        <input th:value="${user.address1}" type="text" id="address1" class="el_btnM hp_inputBack hp_w100 buyerAddr1" name="address1" placeholder="우편 주소" title="우편 주소 입력"/>
+                        <input type="button" id="postCode" class="el_btnM el_btnPointBack hp_ml10" name="" value="우편번호 검색"/>
+                    </div>
+                    <input th:value="${user.address2}" type="text" id="address2" class="el_btnM hp_inputBack hp_w100 hp_mt10" name="address2" placeholder="기본 주소" title="기본 주소 입력"/>
+                    <input th:value="${user.address3}" type="text" id="address3" class="el_btnM hp_inputBack hp_w100 hp_mt10" name="address3" placeholder="상세 주소" title="상세 주소 입력"/>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">결제정보</th>
+                <td>
+                    <ul class="bl_orderCancel">
+                        <li class="ly_spaceBetween ly_fitemC">
+                            <p class="bl_orderCancel__ttl">총 상품금액</p>
+                            <p class="bl_orderCancel__price js_productSum pay_amount"></p>
+                        </li>
+                        <li class="ly_spaceBetween ly_fitemC">
+                            <p class="bl_orderCancel__ttl">배송비</p>
+                            <p class="bl_orderCancel__price js_charge"></p>
+                        </li>
+                        <li class="ly_spaceBetween ly_fitemC bl_orderCancel__total">
+                            <p class="bl_orderCancel__ttl hp_fs18 hp_fw700 hp_0Color">주문 예상금액</p>
+                            <p class="bl_orderCancel__price hp_fs18 hp_fw700 hp_pointColor ">
+                                <input class="none js_amount hp_alignR  hp_fs18 hp_fw700 hp_pointColor" type="number" value=""> 원
+                            </p>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">결제수단</th>
+                <td>
+                    <ul class="ly_flex ly_fitemC">
+                        <li>
+                            <label class="bl_radioCircle">
+                                <input class="bl_radioCircle__input kakaoPayCheck" checked type="radio" name="payMethod" value="카카오페이">
+                                <span class="bl_radioCircle__check"></span>
+                                <span class="hp_dpInblock hp_ml5 hp_fs16">카카오페이</span>
+                            </label>
+                        </li>
+<!--                        <li>-->
+<!--                            <label class="bl_radioCircle hp_ml30">-->
+<!--                                <input class="bl_radioCircle__input" type="radio" name="payMethod" value="신용카드">-->
+<!--                                <span class="bl_radioCircle__check"></span>-->
+<!--                                <span class="hp_dpInblock hp_ml5 hp_fs16">신용/체크카드</span>-->
+<!--                            </label>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <label class="bl_radioCircle hp_ml30">-->
+<!--                                <input class="bl_radioCircle__input" type="radio" name="payMethod" value="무통장">-->
+<!--                                <span class="bl_radioCircle__check"></span>-->
+<!--                                <span class="hp_dpInblock hp_ml5 hp_fs16">무통장입금</span>-->
+<!--                            </label>-->
+<!--                        </li>-->
+                    </ul>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <ul class="ly_flexC hp_mt70">
+<!--            <li><button type="submit" class="el_btnM hp_br5 el_btnPointBack">결제</button></li>-->
+            <li><button type="button" class="el_btnM hp_br5 el_btnPointBack" onclick="payment()">결제</button></li>
+            <li><button class="el_btnM hp_br5 el_btn8Bord hp_ml10" onclick="orderCancel()">취소</button></li>
+        </ul>
+        </form>
+    </div>
+    <th:block th:replace="/user/common/footer.html"></th:block>
+</div>
+<script type="text/javascript" src="/user/js/payment.js"></script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <th:block th:replace="/admin/common/head.html"></th:block>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="/admin/css/datatable.css" rel="stylesheet" />
+</head>
+
+<body class="sb-nav-fixed">
+    <th:block th:replace="/admin/common/header.html"></th:block>
+    <div id="layoutSidenav">
+        <th:block th:replace="/admin/common/sideNav.html"></th:block>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">설문결과</h1>
+                    <div class="card mb-4 mt-4">
+                        <div class="card-header">
+                            <div class="text-end">
+                                <label>
+                                    <select class="datatable-selector">
+                                        <option>희망식단코드 선택</option>
+                                        <option>체중감량</option>
+                                        <option>고단백식</option>
+                                    </select>
+                                </label>
+                                <form class="d-none d-md-inline-block form-inline ms-auto me-0 my-2 my-md-0">
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" placeholder="Search for..."
+                                            aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+                                        <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i
+                                                class="fas fa-search"></i></button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <table class="datatable">
+                                <thead>
+                                    <tr>
+                                        <th>회원아이디</th>
+                                        <th>키</th>
+                                        <th>몸무게</th>
+                                        <th>BMI</th>
+                                        <th>희망식단코드</th>
+                                        <th>당뇨</th>
+                                        <th>암</th>
+                                        <th>신장</th>
+                                        <th>혈압</th>
+                                        <th>설문날짜</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="survey : ${surveyList}">
+                                    <td th:text="${survey.userId}"></td>
+                                    <td th:text="${survey.surveyHeight}"></td>
+                                    <td th:text="${survey.surveyWeight}"></td>
+                                    <td th:text="${survey.surveyBmi}"></td>
+                                    <td th:text="${survey.surveyDiet}"></td>
+                                    <td th:text="${survey.surveyDiabetes}"></td>
+                                    <td th:text="${survey.surveyCancer}"></td>
+                                    <td th:text="${survey.surveyKidney}"></td>
+                                    <td th:text="${survey.surveyBlood}"></td>
+                                    <td th:text="${survey.surveyDate}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <th:block th:replace="/admin/common/foot.html"></th:block>
+</body>
+
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>자주 묻는 질문 관리페이지</title>
+    <th:block th:replace="~{/admin/common/head.html}"></th:block>
+</head>
+<body class="sb-nav-fixed">
+<th:block th:replace="~{/admin/common/header.html}"></th:block>
+<div id="layoutSidenav">
+    <th:block th:replace="~{/admin/common/sideNav.html}"></th:block>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">자주 묻는 질문 등록</h1>
+                <table class="datatable-table mt-4">
+                    <colgroup>
+                        <col style="width:15%"/>
+                        <col style="width:15%"/>
+                        <col style="width:*%"/>
+                        <col style="width:*%"/>
+                    </colgroup>
+                    <tbody>
+                    <!-- 원래 등록된 글 클릭해서 입장시 -->
+                    <tr>
+                        <th scope="row">질문코드</th>
+                        <td th:text="${ qna.qnaCode }"></td>
+                        <th scope="row">관리자아이디</th>
+                        <td th:text="${ qna.adminId }"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="">질문유형</label></th>
+                        <td colspan="3" th:text="${ qna.askCategoryDTO.askCategoryName }">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="">질문제목</label></th>
+                        <td colspan="3" th:text="${ qna.qnaTitle }"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="">답변내용</label></th>
+                        <td colspan="3">
+                                <pre th:text="${ qna.qnaAnswer }"></pre>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="editBtn text-end">
+                    <!-- 원래 등록된 글 클릭해서 입장시 -->
+                    <button type="button" class="btn btn-secondary" th:onclick="'location.href=\'/admin/customer/qnaEdit/' + ${qna.qnaCode} + '\''">수정</button>
+                    <button type="button" class="btn btn-secondary" onclick="location.href='/admin/customer/qnaList'">목록</button>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<th:block th:replace="~{/admin/common/foot.html}"></th:block>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="/project/js/scripts.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+<script src="/project/js/datatables-simple-demo.js"></script>
+</body>
+</html>

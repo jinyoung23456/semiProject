@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ohgiraffers.dosirak.user.review.model.dao.UserReviewMapper">
+
+    <select id="allUserReview" resultType="com.ohgiraffers.dosirak.user.review.model.dto.UserReviewDTO">
+        SELECT
+            *
+        FROM
+            tbl_review
+        ORDER BY
+            review_code
+    </select>
+
+    <select id="searchUserReviewDetail" resultType="com.ohgiraffers.dosirak.user.review.model.dto.UserReviewDTO">
+        SELECT
+            *
+        FROM
+            tbl_review
+        WHERE
+        review_code = #{ reviewCode }
+    </select>
+
+<!--    <insert id="insertReview">-->
+<!--        INSERT-->
+<!--        INTO tbl_review-->
+<!--            (review_title, review_content, review_date, userid-->
+<!--    </insert>-->
+
+<!--    <select id="searchUserReviewRegist" resultType="com.ohgiraffers.dosirak.user.review.model.dto.UserReviewDTO">-->
+<!--        SELECT-->
+<!--        *-->
+<!--        FROM-->
+<!--        tbl_review-->
+<!--        WHERE-->
+<!--        review_code = #{ reviewCode }-->
+<!--    </select>-->
+
+<!--    <select id="searchUserAnswerRegist" resultType="com.ohgiraffers.dosirak.user.review.model.dto.UserAnswerDTO">-->
+<!--        SELECT-->
+<!--        answer_code,-->
+<!--        admin_id,-->
+<!--        answer_date,-->
+<!--        answer_content-->
+<!--        FROM-->
+<!--        tbl_answer-->
+<!--        WHERE-->
+<!--        review_code = #{ reviewCode }-->
+<!--    </select>-->
+
+    <resultMap id="allReviewList" type="com.ohgiraffers.dosirak.user.review.model.dto.OrderDTO">
+        <id property="orderCode" column="order_code"/>
+        <result property="orderStatus" column="order_status"/>
+        <result property="userId" column="user_id"/>
+        <result property="orderRecipient" column="order_recipient"/>
+        <result property="orderContact" column="order_contact"/>
+        <result property="orderAddress" column="order_address"/>
+        <association property="deliveryCode" resultMap="deliveryResultMap"/>
+        <association property="detailCode" resultMap="detailResultMap"/>
+    </resultMap>
+
+    <!-- 가장 최근 리뷰 조회 -->
+    <select id="findLastReview" resultType="com.ohgiraffers.dosirak.user.review.model.dto.ReviewDTO">
+        SELECT
+            *
+        FROM
+            REVIEW
+        ORDER BY
+            review_code desc
+        LIMIT 1
+    </select>
+
+    <!-- 첨부파일 저장 -->
+    <insert id="insertImage">
+        INSERT INTO
+            REVIEW_IMG
+            (ref_review_code, original_name, saved_name, save_path)
+        VALUES
+            (#{ refReviewCode }, #{ originalName }, #{ savedName }, #{ savePath })
+    </insert>
+
+    <!-- 첨부파일 리스트 조회 -->
+    <select id="getImageList" resultType="com.ohgiraffers.dosirak.user.review.model.dto.ReviewImgDTO">
+        SELECT
+            *
+        FROM
+            review_img
+        WHERE
+            ref_review_code = #{ reviewCode }
+    </select>
+
+    <resultMap id="deliveryResultMap" type="com.ohgiraffers.dosirak.user.review.model.dto.DeliveryDTO">
+        <id property="deliveryCode" column="delivery_code"/>
+        <result property="deliveryStatus" column="delivery_status"/>
+    </resultMap>
+
+    <resultMap id="detailResultMap" type="com.ohgiraffers.dosirak.user.review.model.dto.DetailDTO">
+        <id property="detailCode" column="detail_code"/>
+    </resultMap>
+
+    <resultMap id="productResultMap" type="com.ohgiraffers.dosirak.user.review.model.dto.ProductDTO">
+        <id property="productCode" column="product_code"/>
+        <result property="productName" column="product_name"/>
+    </resultMap>
+
+        <!-- -->
+
+    <select id="getReviewListById" resultType="com.ohgiraffers.dosirak.user.review.model.dto.ReviewDTO">
+
+        SELECT
+            O.order_code , D.PRODUCT_CODE, D.DETAIL_CODE, P.PRODUCT_NAME, B.PAY_DATE, L.DELIVERY_STATUS
+        FROM
+            `ORDER` O
+        LEFT JOIN
+            detail D USING (order_code)
+        LEFT JOIN
+            tbl_product P USING (PRODUCT_CODE)
+        LEFT JOIN
+            `PAY` B USING (order_code)
+        LEFT JOIN
+            DELIVERY L USING (order_code)
+        LEFT JOIN
+            REVIEW R USING (detail_code)
+        WHERE
+            O.ID = #{ userId } AND R.REVIEW_CODE IS NULL
+        ORDER BY
+            O.order_code DESC
+
+    </select>
+
+    <select id="selectTotalCount" resultType="_int" parameterType="hashmap">
+        SELECT
+        COUNT(*)
+        FROM
+        REVIEW
+    </select>
+
+    <select id="selectReviewList" resultType="com.ohgiraffers.dosirak.user.review.model.dto.ReviewDTO">
+
+        SELECT
+            O.order_code , D.PRODUCT_CODE, D.DETAIL_CODE, P.PRODUCT_NAME, B.PAY_DATE, L.DELIVERY_STATUS
+        FROM
+            `ORDER` O
+        LEFT JOIN
+            detail D USING (order_code)
+        LEFT JOIN
+            tbl_product P USING (PRODUCT_CODE)
+        LEFT JOIN
+            `PAY` B USING (order_code)
+        LEFT JOIN
+            DELIVERY L USING (order_code)
+        LEFT JOIN
+            REVIEW R USING (detail_code)
+        WHERE
+            O.ID = #{ userId } AND R.REVIEW_CODE IS NULL
+
+    </select>
+
+    <insert id="getReviewDTOInformation" parameterType="com.ohgiraffers.dosirak.user.review.model.dto.ReviewDTO">
+        INSERT
+        INTO review
+            (review_title, review_content, user_id, detail_code, review_date)
+        VALUES
+            (#{reviewDTO.reviewTitle},#{reviewDTO.reviewContent},#{userId},#{reviewDTO.detailCode}, NOW());
+
+    </insert>
+
+    <select id="getMyList" resultType="com.ohgiraffers.dosirak.user.review.model.dto.ReviewDTO">
+        SELECT
+        R.review_title, R.review_date, A.ANSWER_STATUS, R.review_code
+        FROM
+        REVIEW R
+        LEFT JOIN
+        ANSWER A USING ( review_code )
+        WHERE
+        user_id = #{ userId }
+        and review_delete = 'N'
+        ORDER BY
+        R.review_code DESC
+
+    </select>
+
+    <select id="getMyReview" resultType="com.ohgiraffers.dosirak.user.review.model.dto.ReviewDTO">
+        SELECT
+        review_title, review_content, ANSWER_CONTENT, review_code
+        FROM
+        review
+        LEFT JOIN
+        answer USING (review_code)
+        WHERE
+        review_code = #{ reviewCode }
+
+    </select>
+
+
+
+    <update id="EditReview">
+        UPDATE REVIEW
+        SET review_title = #{ reviewTitle }, review_content = #{ reviewContent }, review_editdate = NOW()
+        WHERE REVIEW_CODE = #{ reviewCode }
+    </update>
+
+    <update id="deleteReview">
+        UPDATE REVIEW
+        SET review_delete = 'Y'
+        WHERE REVIEW_CODE = #{ reviewCode }
+    </update>
+</mapper>

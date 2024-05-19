@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ohgiraffers.dosirak.user.product.dao.ProductUserMapper">
+    <resultMap id="product" type="com.ohgiraffers.dosirak.user.product.dto.ProductUserDTO">
+        <id property="productName" column="PRODUCT_NAME"/>
+        <result property="productCode" column="PRODUCT_CODE"/>
+        <result property="productPrice" column="PRODUCT_PRICE"/>
+        <result property="productStatus" column="PRODUCT_STATUS"/>
+        <result property="productCategoryCode" column="PRODUCT_CATEGORY_CODE"/>
+        <result property="productSummary" column="product_summary"/>
+    </resultMap>
+    <select id="findAllUserProduct" resultMap="product">
+        SELECT PRODUCT_NAME,PRODUCT_CODE,PRODUCT_PRICE,PRODUCT_STATUS,PRODUCT_CATEGORY_CODE,product_summary
+        FROM tbl_product;
+    </select>
+    <select id="viewProduct" resultMap="product">
+        SELECT
+        *
+        FROM
+        tbl_product
+        WHERE
+        PRODUCT_CODE = #{productCode};
+    </select>
+    <select id="productsListView" resultMap="product">
+<!--        SELECT *-->
+<!--        FROM tbl_product-->
+<!--        WHERE PRODUCT_CATEGORY_CODE IN (2);-->
+        SELECT *
+        FROM tbl_product
+        WHERE PRODUCT_CODE = #{productCode};
+
+    </select>
+
+    <select id="getProductListBySubCategoryCode">
+        SELECT *
+        FROM TBL_PRODUCT P
+        LEFT JOIN TBL_PRODUCT_CATEGORY C
+        ON P.product_category_code = c.product_main_category_code
+        WHERE c.product_sub_category_code = #{subCategoryCode}
+    </select>
+    <insert id="addCart">
+        INSERT INTO cart
+        (CARTITEM_COUNT,ID,PRODUCT_CODE)
+        VALUE (#{cartitemCount}, #{userId}, #{productCode})
+    </insert>
+    <!-- productMapper.xml -->
+
+    <select id="comeImageList" resultType="com.ohgiraffers.dosirak.user.product.dto.ProductandImageDTO">
+        SELECT p.*, pi.*, pi.SAVED_NAME AS SAVED_NAME
+        FROM tbl_product p
+        LEFT JOIN (
+        SELECT *, ROW_NUMBER() OVER (PARTITION BY product_code ORDER BY img_code) AS rn
+        FROM product_img
+        ) pi ON p.product_code = pi.product_code AND pi.rn = 1
+    </select>
+    <select id="findAllProducts" resultType="com.ohgiraffers.dosirak.user.product.dto.ProductUserDTO">
+        SELECT *
+        FROM tbl_product
+    </select>
+    <select id="findImagesByProductCode" resultType="com.ohgiraffers.dosirak.admin.product.dto.ProductImageDTO">
+        SELECT *
+        FROM product_img
+        WHERE PRODUCT_CODE = #{productCode}
+    </select>
+
+    <select id="searchImageForProduct" resultType="com.ohgiraffers.dosirak.admin.product.dto.ProductImageDTO">
+        SELECT
+            *
+        FROM
+            product_img
+        WHERE
+        PRODUCT_CODE = #{productCode}
+    </select>
+
+
+
+</mapper>

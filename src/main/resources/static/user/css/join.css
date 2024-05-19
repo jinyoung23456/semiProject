@@ -1,0 +1,19 @@
+@charset "UTF-8";
+button:disabled{background:#888;color:#fff;cursor:default;}
+.bl_joinStep{}
+.bl_joinStep__cont{width:33.333%;text-align:center;padding:20px 0;margin-left:5px;border-bottom:3px solid #dedede;font-size:16px;}
+.bl_joinStep__cont:nth-child(1){margin-left:0;}
+.bl_joinStep__cont.hp_active{border-bottom-color:#426B1F;}
+
+.bl_joinTB th{text-align:left;color:#777;font-size:14px;}
+.bl_joinTB td{padding:3px 0;}
+.bl_joinTB .bl_radioBxArea__txt{width:48px;height:48px;border:1px solid #426B1F;background:#eee;color:#426B1F;}
+
+.el_checkMsg{position:absolute;top:0;right:0;padding:0 10px;height:100%;display:flex;align-items:center;background:#eee;border-radius:5px;border-bottom-left-radius:0;broder-top-left-radius:0;}
+.tr_none{display:none;}
+.tr_inputCode{display:none;}
+.sendCodeBtn{display:none;}
+.tr_inputPwdConfirm{display:none;}
+
+
+

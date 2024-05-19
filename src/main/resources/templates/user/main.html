@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>main</title>
+    <th:block th:replace="/user/common/head.html"></th:block>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="/user/css/main.css"/>
+    <script>
+        const message = '[[${message}]]';
+        message && alert(message);
+    </script>
+</head>
+<body>
+    <div class="ly_all bl_all">
+        <th:block th:replace="/user/common/header.html"></th:block>
+        <div class="ly_maxWD">
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide" style="background-image:url(/user/img/main/main01.png);">
+                        <div class="bl_swiper__cont bl_swiper__cont01">
+                            <dl class="bl_swiper__box">
+                                <dt class="bl_swiper__ttl">취향대로 골라담을 수 있는<br/>나만의 식단 맞춤도시락</dt>
+                                <dd class="bl_swiper__txt">
+                                    취향대로 골라담을 수 있는 나만의 식단
+                                    <a class="bl_swiper__btn" href="">식단 구경하기</a>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="swiper-slide bl_swiper__slide02" style="background-image:url(/user/img/main/main03.png);">
+                        <div class="bl_swiper__cont bl_swiper__cont02">
+                            <dl class="bl_swiper__box">
+                                <dt class="bl_swiper__ttl">질병을 앓고 있는 사람들을 위한 <br/>밸런스식단 건강도시락</dt>
+                                <dd class="bl_swiper__txt">
+                                    건강한 식단을 추구하는 사람<br/>
+                                    식단 관리가 필요한 사람
+                                    <a class="bl_swiper__btn" href="">식단 구경하기</a>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="swiper-slide" style="background-image:url(/user/img/main/main02.png);">
+                        <div class="bl_swiper__cont bl_swiper__cont03">
+                            <dl class="bl_swiper__box">
+                                <dt class="bl_swiper__ttl">바쁜 현대인들을 위한 영양식<br/>정성도시락</dt>
+                                <dd class="bl_swiper__txt">
+                                    혼자 제대로 차려먹기엔 가격도 시간도 부담되는 1인 가구<br/>
+                                    바쁜 일상으로 시간이 없고 편리한 옵션이 필요한 현대인
+                                    <a class="bl_swiper__btn" href="">식단 구경하기</a>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+        <script>
+            var swiper = new Swiper(".mySwiper", {
+                centeredSlides: true,
+                autoplay: {
+                    delay: 2500,
+                    disableOnInteraction: false,
+                }
+            });
+        </script>
+        <th:block th:replace="/user/common/footer.html"></th:block>
+    </div>
+</body>
+</html>

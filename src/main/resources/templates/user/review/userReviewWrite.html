@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <th:block th:replace="/user/common/head.html"></th:block>
+    <script>
+        $(function(){
+            $(".reviewRegistBtn").click(function(){
+                let reviewTitle = $(".reviewTitle").val();
+                let reviewContent = $(".reviewContent").val();
+
+                if( reviewTitle == null || reviewTitle == ""){
+                    alert("리뷰제목을 입력해주세요.")
+                    $(".reviewTitle").focus();
+                    return false;
+                }
+
+                if(reviewContent == null || reviewContent == ""){
+                    alert("리뷰내용을 입력해주세요.")
+                    $(".reviewContent").focus();
+                    return false;
+                }
+            })
+        })
+    </script>
+</head>
+<body>
+    <div class="ly_all bl_all">
+        <th:block th:replace="/user/common/header.html"></th:block>
+        <div class="bl_sideMenuBack">
+            <div class="ly_maxWD ly_flex">
+                <th:block th:replace="/user/common/sideMenu.html"></th:block>
+                <div class="ly_inner02 ly_fgrow1 hp_fBack">
+                    <div class="ly_midWDside">
+                        <h2 class="el_lv1Head">리뷰작성</h2>
+                        <form action="/user/review/userReviewWriteDone" method="post" enctype="multipart/form-data" onsubmit="return handleSubmit()">
+                        <table class="bl_TBWrite hp_mt50">
+                            <caption class="WA">검색</caption>
+                            <colgroup>
+                                <col style="width:150px"/>
+                                <col style="width:*"/>
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <th scope="row"><label for="">상품명</label></th>
+                                    <td>
+                                        <div class="ly_spaceBetween ly_fitemC" th:text="${productName}">
+                                        </div>
+                                        <input type="hidden" th:value="${detailCode}" name="detailCode">
+                                        <input type="hidden" th:value="${productName}" name="productName">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><label for="">리뷰제목</label></th>
+                                    <td>
+                                        <input class="hp_w100 reviewTitle" type="text" name="reviewTitle"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><label for="">리뷰내용</label></th>
+                                    <td>
+                                        <textarea id="" class="reviewContent" name="reviewContent" placeholder="리뷰 내용이 다른 고객에게 도움이 될 수 있도록 솔직하게 작성해주세요." title="리뷰 내용이 다른 고객에게 도움이 될 수 있도록 솔직하게 작성해주세요."></textarea>
+                                        <p class="hp_7Color hp_fs13 hp_mt5">※ 상품과 관련 없는 내용 작성시 무통보 삭제 처리 됩니다.</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">이미지파일</th>
+                                    <td>
+                                        <label for="" style="display: flex;">
+                                            <div class="image-area">
+                                                <img style="width: 80px; height: 80px; margin-right: 5px; background: white; border-radius: 2.5px;" alt="">
+                                            </div>
+                                            <div class="image-area">
+                                                <img style="width: 80px; height: 80px; margin-right: 5px; background: white; border-radius: 2.5px;" alt="">
+                                            </div>
+                                            <div class="image-area">
+                                                <img style="width: 80px; height: 80px; margin-right: 5px; background: white; border-radius: 2.5px;" alt="">
+                                            </div>
+                                            <div class="image-area">
+                                                <img style="width: 80px; height: 80px; margin-right: 5px; background: white; border-radius: 2.5px;" alt="">
+                                            </div>
+                                            <div class="image-area">
+                                                <img style="width: 80px; height: 80px; margin-right: 5px; background: white; border-radius: 2.5px;" alt="">
+                                            </div>
+                                        </label>
+                                        <div style="display: none;">
+                                            <input type="file" name="attachImage" accept="image/gif,image/jpeg,image/png">
+                                            <input type="file" name="attachImage" accept="image/gif,image/jpeg,image/png">
+                                            <input type="file" name="attachImage" accept="image/gif,image/jpeg,image/png">
+                                            <input type="file" name="attachImage" accept="image/gif,image/jpeg,image/png">
+                                            <input type="file" name="attachImage" accept="image/gif,image/jpeg,image/png">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <ul class="ly_flexC hp_mt70">
+                            <li><button type="submit" class="el_btnM hp_br5 el_btnPointBack reviewRegistBtn">등록</button></li>
+                            <li><a class="el_btnM hp_br5 el_btn8Bord hp_ml10" href="">취소</a></li>
+                        </ul>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <th:block th:replace="/user/common/footer.html"></th:block>
+    </div>
+    <script>
+        (function(){
+            /* div image area 요소 */
+            const imageArea = document.querySelectorAll(".image-area");
+            /* input type=file 요소 */
+            const fileElements = document.querySelectorAll("[type=file]");
+            /* div 클릭 시 open 함수 동작하여 input type=file 클릭 */
+            imageArea.forEach(item => item.addEventListener('click', open));
+            /* 파일 첨부가 발생하는 상황에 preview 함수 동작 */
+            fileElements.forEach(item => item.addEventListener('change', preview));
+
+            function open() {
+                const index = Array.from(imageArea).indexOf(this);
+                fileElements[index].click();
+            }
+
+            function preview() {
+                const index = Array.from(fileElements).indexOf(this);
+                console.log(this);
+                console.log(this.files, this.files[0]);
+                /* 첨부 된 파일이 존재한다면 */
+                if(this.files && this.files[0]) {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(this.files[0]);
+                    /* 파일 로드 후 동작하는 이벤트 설정 */
+                    reader.onload = function() {
+                        console.log(reader.result);
+                        if(index === 0) {
+                            imageArea[index].innerHTML = `<img src='${reader.result}' style='width:80px;height:80px; margin-right: 5px;'>`;
+                        } else {
+                            imageArea[index].innerHTML = `<img src='${reader.result}' style='width:80px;height:80px; margin-right: 5px;'>`;
+                        }
+                    }
+                }
+            }
+        })();
+    </script>
+</body>
+</html>

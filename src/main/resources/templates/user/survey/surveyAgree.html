@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <th:block th:replace="/user/common/head.html"></th:block>
+    <link rel="stylesheet" href="/user/css/survey.css">
+</head>
+<body>
+<div class="ly_all bl_all">
+    <th:block th:replace="/user/common/header.html"></th:block>
+    <div class="ly_inner02 ly_midWD">
+        <img src="../../../static/user/img/main/main03.png"> <!-- DB 이미지 끌어오기 or 이미지 삽입 -->
+                <form action="info" method="post">
+        <div class="ly_inner01 hp_bordDE hp_br5 hp_margin10 ">
+            <ul>
+                <li class="">
+                    <label class="bl_checkBx hp_mt20">
+                        <input type="checkbox" class="bl_checkBx__input">
+                        <span class="bl_checkBx__check"></span>
+                        <span class="hp_ml10 hp_fs20 hp_alignL">(필수) 개인정보 수집 · 이용에 동의합니다.
+                                <p class="hp_fs14 hp_7Color hp_mt5">보다 정확한 서비스 제공을 위하여 회원의 정보를 수집 · 이용하고 있습니다. <br>내용을 확인해주시고 동의 여부를 결정해주세요.</p>
+                            </span>
+                    </label>
+                </li>
+                <li class="hp_bordDashTDE2 hp_mt20 hp_pt20">
+                    <label class="bl_checkBx hp_w100">
+                        <input type="checkbox" class="bl_checkBx__input">
+                        <span class="bl_checkBx__check"></span>
+                        <span class="hp_ml10 ly_fgrow1 ly_spaceBetween">[필수] 개인정보 수집 · 이용 동의
+                                <a class="hp_7Color" href="">약관보기 ></a>
+                            </span>
+                    </label>
+                </li>
+                <li class="hp_mt10 hp_mb20">
+                    <label class="bl_checkBx hp_w100">
+                        <input type="checkbox" class="bl_checkBx__input">
+                        <span class="bl_checkBx__check"></span>
+                        <span class="hp_ml10 ly_fgrow1 ly_spaceBetween">[필수] 민감정보 수집 · 이용 동의
+                                <a class="hp_7Color" href="">약관보기 ></a>
+                            </span>
+                    </label>
+                </li>
+
+            </ul>
+        </div>
+        <button type="submit" class="el_btnM el_btnPointBack hp_w50 hp_br5 hp_mt30 hp_marginAuto">설문 시작하기</button>
+        </form>
+    </div>
+    <th:block th:replace="/user/common/footer.html"></th:block>
+</div>
+</body>
+</html>

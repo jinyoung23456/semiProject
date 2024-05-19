@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <th:block th:replace="/admin/common/head.html"></th:block>
+    <script>
+        const message = '[[${message}]]';
+        message && alert(message);
+        $(function(){
+            $("#datatablesSimple tbody tr").click(function(){
+                let txtId = $("td:nth-of-type(1)", this).text();
+                location.href = "/admin/member/managerView?id="+txtId;
+            })
+
+            $(".searchMemBtn").click(function(){
+                let condition = $(".searchCondition").val();
+                let value = $(".searchValue").val();
+
+                let searchUrl = "";
+
+                if (condition != null && condition != "" && value != null && value != "") {
+                    searchUrl = "?searchCondition=" + condition + "&searchValue=" + value;
+                } else if (condition != null && condition != "") {
+                    searchUrl = "?searchCondition=" + condition;
+                } else if (value != null && value != "") {
+                    searchUrl = "?searchValue=" + value;
+                }
+
+                location.href = "/admin/member/managerList" + searchUrl;
+            })
+
+            // url 가져와서 다시 검색조건 넣기
+            const urlCondition = new URL(location.href).searchParams.get("searchCondition");
+            const urlValue = new URL(location.href).searchParams.get("searchValue");
+
+            if(urlCondition != null) $(".searchCondition").val(urlCondition);
+            if(urlValue != null) $(".searchValue").val(urlValue);
+        })
+    </script>
+</head>
+<body>
+<body class="sb-nav-fixed">
+<th:block th:replace="/admin/common/header.html"></th:block>
+<div id="layoutSidenav">
+    <th:block th:replace="/admin/common/sideNav.html"></th:block>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">관리자 목록</h1>
+                <div class="card mb-4 mt-4">
+                    <div class="card-header justify-content-between d-flex align-items-center">
+                        <i class="fas fa-table me-1"></i>
+                        <div class="d-none d-md-inline-block form-inline ms-auto me-0 my-2 my-md-0">
+                            <div class="input-group">
+                                <select class="searchCondition datatable-selector" name="searchCondition">
+                                    <option value="">검색조건 선택</option>
+                                    <option value="id">아이디</option>
+                                    <option value="name">이름</option>
+                                    <option value="contact">내선번호</option>
+                                    <option value="email">이메일</option>
+                                    <option value="position">직급</option>
+                                    <option value="department">부서</option>
+                                </select>
+                                <input class="searchValue form-control" type="text" name="memberSearchValue" aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+                                <button type="button" class="btn btn-primary searchMemBtn"><i class="fas fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table id="datatablesSimple">
+                            <thead>
+                            <tr>
+                                <th>아이디</th>
+                                <th>이름</th>
+                                <th>생년월일</th>
+                                <th>성별</th>
+                                <th>내선번호</th>
+                                <th>이메일</th>
+                                <th>직급</th>
+                                <th>부서</th>
+                                <th>입사날짜</th>
+                            </tr>
+                            </thead>
+                            <tfoot>
+                            <tr>
+                                <th>아이디</th>
+                                <th>이름</th>
+                                <th>생년월일</th>
+                                <th>성별</th>
+                                <th>내선번호</th>
+                                <th>이메일</th>
+                                <th>직급</th>
+                                <th>부서</th>
+                                <th>입사날짜</th>
+                            </tr>
+                            </tfoot>
+                            <tbody>
+                            <tr th:each="manager : ${managerList}">
+                                <td th:text="${manager.id}"></td>
+                                <td th:text="${manager.name}"></td>
+                                <td th:text="${manager.birth}"></td>
+                                <td th:text="${manager.gender}"></td>
+                                <td th:text="${manager.contact}"></td>
+                                <td th:text="${manager.email}"></td>
+                                <td th:text="${manager.position}"></td>
+                                <td th:text="${manager.department}"></td>
+                                <td th:text="${manager.joindate}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<th:block th:replace="/admin/common/foot.html"></th:block>
+</body>
+</body>
+</html>

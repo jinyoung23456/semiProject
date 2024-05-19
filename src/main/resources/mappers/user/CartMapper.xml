@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ohgiraffers.dosirak.user.order.model.dao.CartMapper">
+
+    <!-- MemberDTO Mapping -->
+    <resultMap id="MemberResultMap" type="com.ohgiraffers.dosirak.admin.member.model.dto.MemberDTO">
+        <id property="id" column="ID"/>
+        <result property="name" column="NAME"/>
+        <result property="phone" column="PHONE"/>
+        <result property="address1" column="ADDRESS1"/>
+        <result property="address2" column="ADDRESS2"/>
+        <result property="address3" column="ADDRESS3"/>
+    </resultMap>
+
+    <!-- PayDTO Mapping -->
+    <resultMap id="PayResultMap" type="com.ohgiraffers.dosirak.admin.order.model.dto.PayDTO">
+        <result property="payPrice" column="pay_price"/>
+        <result property="payDate" column="pay_date"/>
+        <result property="payStatus" column="pay_status"/>
+        <result property="payMethod" column="pay_method"/>
+        <result property="orderCode" column="order_code"/>
+    </resultMap>
+
+    <!-- ProductDTO Mapping -->
+    <resultMap id="ProductResultMap" type="com.ohgiraffers.dosirak.admin.product.dto.productDTO">
+        <id property="productCode" column="product_code"/>
+        <result property="productName" column="product_name"/>
+        <result property="productPrice" column="product_price"/>
+    </resultMap>
+
+    <!-- CartDTO Mapping -->
+    <resultMap id="CartResultMap" type="com.ohgiraffers.dosirak.user.order.model.dto.CartDTO">
+        <result property="cartitemCount" column="cartitem_count"/>
+        <result property="productCode" column="product_code"/>
+        <result property="productName" column="product_name"/>
+        <result property="productPrice" column="product_price"/>
+        <result property="savePath" column="save_path"/>
+        <association property="suitbox" resultMap="SuitBoxResultMap"/>
+    </resultMap>
+
+    <resultMap id="SuitBoxResultMap" type="com.ohgiraffers.dosirak.user.suitBox.model.dto.SuitBoxDTO">
+        <id column="suitbox_code" property="suitboxCode" />
+        <result column="rice_code" property="riceCode" />
+        <result column="main_code" property="mainCode" />
+        <result column="side_code" property="sideCode" />
+        <result column="kimchi_code" property="kimchiCode" />
+    </resultMap>
+
+    <!-- OrderDTO Mapping -->
+    <resultMap id="orderResultMap" type="com.ohgiraffers.dosirak.admin.order.model.dto.OrderDTO">
+        <id property="orderCode" column="order_code"/>
+        <association property="pay" resultMap="payResultMap"/>
+    </resultMap>
+
+    <!-- PayDTO Mapping -->
+    <resultMap id="payResultMap" type="com.ohgiraffers.dosirak.admin.order.model.dto.PayDTO">
+        <result property="payDate" column="pay_date"/>
+        <result property="orderCode" column="order_code"/>
+    </resultMap>
+
+    <!-- UserCartList Query -->
+    <select id="userCartList" resultMap="CartResultMap">
+        SELECT
+            c.cartitem_count,
+            p.product_code,
+            p.product_name,
+            p.product_price,
+            s.suitbox_code,
+            i.save_path,
+            s.rice_code,
+            s.main_code,
+            s.side_code,
+            s.kimchi_code
+        FROM
+            cart c
+        LEFT JOIN tbl_product p ON c.product_code = p.product_code
+        LEFT JOIN product_img i ON c.product_code = i.product_code
+        LEFT JOIN SUIT_BOX s ON c.suitbox_code = s.SUITBOX_CODE
+        WHERE c.id = #{userId}
+    </select>
+
+    <select id="getMenuByCode">
+        SELECT menu_code,
+        menu_name,
+        menu_category,
+        menu_extracash,
+        menu_status
+        FROM MENU
+        WHERE MENU_CODE = #{menuCode}
+    </select>
+
+    <select id="getPaymentByUserId" parameterType="string">
+        SELECT id, name, PHONE, ADDRESS1, ADDRESS2, ADDRESS3
+        FROM USER
+        WHERE ID = #{userId}
+    </select>
+
+    <select id="getProductByCart" resultMap="CartResultMap" parameterType="hashMap">
+        SELECT
+            c.cartitem_count,
+            p.product_code,
+            p.product_name,
+            p.product_price,
+            pi.save_path
+        FROM
+            cart c
+        JOIN tbl_product p ON c.product_code = p.product_code
+        JOIN product_img pi ON p.product_code = pi.product_code
+        WHERE c.id = #{userId} AND p.product_code = #{productCode}
+    </select>
+
+    <select id="getSuitboxCodeByCart" resultMap="CartResultMap" parameterType="hashMap">
+        SELECT
+            c.cartitem_count,
+            s.suitbox_code,
+            s.rice_code,
+            s.main_code,
+            s.side_code,
+            s.kimchi_code
+        FROM
+            cart c
+        JOIN suit_box s ON c.suitbox_code = s.suitbox_code
+        WHERE c.id = #{userId} AND s.suitbox_code = #{suitboxCode}
+    </select>
+
+    <!-- UserOrderDone Query -->
+<!--    <select id="userOrderDone" resultMap="orderResultMap">-->
+<!--        SELECT-->
+<!--            o.order_code,-->
+<!--            p.pay_date-->
+<!--        FROM-->
+<!--            `order` o-->
+<!--        JOIN pay p ON o.order_code = p.order_code-->
+<!--        WHERE c.id = #{id}-->
+<!--    </select>-->
+
+    <insert id="userOrderDone">
+        INSERT INTO `ORDER` (ID, ORDER_RECIPIENT, ORDER_CONTACT, ORDER_ADDRESS1, ORDER_ADDRESS2, ORDER_ADDRESS3)
+        VALUES
+        (#{memberId}, #{name}, #{phone}, #{address1},#{address2},#{address3})
+    </insert>
+
+    <select id="findOrderCode" resultType="string">
+        SELECT
+            ORDER_CODE
+        FROM
+            `ORDER`
+        ORDER BY ORDER_CODE DESC LIMIT 1
+    </select>
+
+    <select id="findPayDate">
+        SELECT
+            P.PAY_DATE
+        FROM
+            PAY P
+        JOIN `ORDER` O ON P.ORDER_CODE = O.ORDER_CODE
+        WHERE O.ORDER_CODE = #{orderCode}
+    </select>
+
+    <insert id="insertDetailSuitbox">
+        INSERT INTO DETAIL (DETAILITEM_COUNT, SUITBOX_CODE, ORDER_CODE)
+        VALUES
+            (#{cartitemCount}, #{suitboxCode}, #{orderCode})
+    </insert>
+
+    <insert id="insertDetailProduct">
+        INSERT INTO DETAIL (DETAILITEM_COUNT, PRODUCT_CODE, ORDER_CODE)
+        VALUES
+        (#{cartitemCount}, #{productCode}, #{orderCode})
+    </insert>
+
+    <!-- UserPayment Query-->
+    <select id="userPayment" resultMap="CartResultMap">
+        SELECT
+            c.product_code,
+            c.cartitem_count,
+            p.PRODUCT_NAME,
+            p.PRODUCT_price,
+            u.name,
+            u.phone,
+            u.address1,
+            u.address2,
+            u.address3
+        FROM
+            cart c
+        JOIN user u ON c.id = u.id
+        JOIN tbl_product p ON c.PRODUCT_CODE = p.PRODUCT_CODE
+        WHERE c.id = #{userId}
+    </select>
+
+    <!-- CartUpdateQuantity Query -->
+    <update id="cartUpdateQuantity" parameterType="com.ohgiraffers.dosirak.user.order.model.dto.CartDTO">
+        UPDATE
+            cart
+        SET
+            cartitem_count = #{updatedQuantity}
+        WHERE
+            product_code = #{productCode}
+    </update>
+    <update id="cartUpdateQuantitySuitbox" parameterType="hashMap">
+        UPDATE
+            cart
+        SET
+            cartitem_count = #{cartitemCount}
+        WHERE
+            suitbox_code = #{suitboxCode}
+    </update>
+
+    <insert id="insertPay" parameterType="hashMap">
+        INSERT INTO PAY (ORDER_CODE, PAY_PRICE, PAY_DATE, PAY_STATUS, PAY_METHOD)
+        VALUES
+        (#{orderCode}, #{payPrice}, NOW(), #{payStatus}, #{payMethod})
+    </insert>
+
+    <insert id="insertDelivery">
+        INSERT INTO DELIVERY (ORDER_CODE)
+        VALUES
+        (#{orderCode})
+    </insert>
+
+    <delete id="deleteCartSuitbox">
+        DELETE FROM CART
+        WHERE id = #{memberId} AND suitbox_code = #{itemCode}
+    </delete>
+
+    <delete id="deleteCartProduct">
+        DELETE FROM CART
+        WHERE id = #{memberId} AND product_code = #{itemCode}
+    </delete>
+
+    <delete id="cartDeleteProductList">
+        DELETE FROM CART
+        WHERE product_code = #{productCode}
+    </delete>
+
+    <delete id="cartDeleteSuitboxList">
+        DELETE FROM CART
+        WHERE suitbox_code = #{suitboxCode}
+    </delete>
+</mapper>

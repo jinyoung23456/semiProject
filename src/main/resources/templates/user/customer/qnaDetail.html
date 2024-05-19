@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>자주 묻는 질문</title>
+    <th:block th:replace="~{/user/common/head.html}"></th:block>
+</head>
+<body>
+<th:block th:replace="~{/user/common/header.html}"></th:block>
+<div class="ly_all bl_all">
+    <div class="bl_sideMenuBack">
+        <div class="ly_maxWD ly_flex">
+            <th:block th:replace="~{/user/customer/sideMenu.html}"></th:block>
+            <div class="ly_inner02 ly_fgrow1 hp_fBack">
+                <div class="ly_midWDside">
+                    <h2 class="el_lv1Head">자주 묻는 질문</h2>
+                    <table class="bl_TBView hp_mt50">
+                        <caption class="WA">검색</caption>
+                        <colgroup>
+                            <col style="width:*"/>
+                            <col style="width:*"/>
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row">분류</th>
+                            <td>
+                                <span th:if="${qna.askCategoryCode == 1}">회원</span>
+                                <span th:if="${qna.askCategoryCode == 2}">주문/결제</span>
+                                <span th:if="${qna.askCategoryCode == 3}">배송/반품</span>
+                                <span th:if="${qna.askCategoryCode == 4}">취소/교환/환불</span>
+                                <span th:if="${qna.askCategoryCode == 5}">서비스/기타</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="width: 30%">질문</th>
+                            <td th:text="${ qna.qnaTitle }"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">답변</th>
+                            <td>
+                                <pre th:utext="${#strings.replace(qna.qnaAnswer, '\n', '<br>')}"></pre>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <ul class="ly_flexC hp_mt70">
+                        <li>
+                            <button type="button" class="el_btnM hp_br5 el_btnPointBack" onclick="location.href='/user/customer/qnaList'">목록</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <th:block th:replace="/user/common/footer.html"></th:block>
+</div>
+</body>
+</html>git st

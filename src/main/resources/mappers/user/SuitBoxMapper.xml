@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ohgiraffers.dosirak.user.suitBox.model.dao.SuitBoxMapper">
+    <select id="selectSaleMenu" resultType="com.ohgiraffers.dosirak.admin.suitBox.model.dto.SuitBoxMenuDTO">
+        SELECT * FROM MENU WHERE menu_status = 'Y' or menu_status = 'S' ORDER BY menu_status, menu_name
+    </select>
+</mapper>

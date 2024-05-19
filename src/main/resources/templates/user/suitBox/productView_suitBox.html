@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <th:block th:replace="/user/common/head.html"></th:block>
+    <link rel="stylesheet" href="/user/css/product.css"/>
+    <link rel="stylesheet" href="/user/css/cart.css"/>
+    <link rel="stylesheet" href="/user/css/review.css"/>
+    <script th:inline="javascript">
+        const menuList = [[${menuList}]]
+        console.log(menuList)
+    </script>
+    <script type="module" defer src="/user/js/suit-box/tab.mjs"></script>
+    <script type="module" defer src="/user/js/suit-box/setOption.mjs"></script>
+    <script type="module" defer src="/user/js/suit-box/calculator.mjs"></script>
+</head>
+<body>
+<div class="ly_all bl_all">
+    <th:block th:replace="/user/common/header.html"></th:block>
+    <div class="ly_maxWD ly_inner02 bl_pdView">
+        <div class="ly_flexC ly_fitemEnd">
+            <img class="bl_pdView__img hp_mr40" src="/user/img/main/main01.png" alt=""/>    <!--DB에서 이미지 끌어올것-->
+            <div class="bl_pdView__wrap hp_ml20" style="width:350px;">
+                <h2 class="el_lv1Head hp_alignL">나만을 위한 맞춤 도시락</h2>
+                <div class="ly_spaceBetween ly_fitemC hp_mt30">
+                    <p class="hp_fs16">기본가격</p>
+                    <p class="hp_fs18 hp_alignR"><b class="hp_fw700 hp_fs24">7,000</b> 원</p>
+                </div>
+                <div class="ly_spaceBetween ly_fitemC hp_mt10">
+                    <p class="hp_fs16">밥류</p>
+                    <select class="hp_w200px menu-select" id="rice">
+                        <option></option>
+                    </select>
+                </div>
+                <div class="ly_spaceBetween ly_fitemC hp_mt10">
+                    <p class="hp_fs16">메인반찬</p>
+                    <select class="hp_w200px menu-select" id="main">
+                        <option></option>
+                    </select>
+                </div>
+                <div class="ly_spaceBetween ly_fitemC hp_mt10">
+                    <p class="hp_fs16">서브반찬</p>
+                    <select class="hp_w200px menu-select" id="side">
+                        <option></option>
+                    </select>
+                </div>
+                <div class="ly_spaceBetween ly_fitemC hp_mt10">
+                    <p class="hp_fs16">김치류</p>
+                    <select class="hp_w200px menu-select" id="kimchi">
+                        <option></option>
+                    </select>
+                </div>
+                <div class="ly_spaceBetween ly_fitemC hp_mt10">
+                    <p class="hp_fs16">상품수량</p>
+                    <div class="di_btn">
+                        <div class="decrease" id="minusButton"><img src="/user/img/icon/minus.png" alt="minus-btn"></div>
+                        <input type="number" class="quantity" value="1" min="1" id="quantity"/>
+                        <div class="increase" id="plusButton"><img src="/user/img/icon/plus.png" alt="plus-btn"></div>
+                    </div>
+                </div>
+                <div class="ly_spaceBetween ly_fitemC hp_fs20 hp_mt20 hp_pt10 hp_bordDashTDE2">
+                    <span>총 상품금액</span>
+                    <span><b class="hp_fs28 hp_fw700 hp_pointColor" id="totalPrice">7,000</b> 원</span>
+                </div>
+                <div class="ly_flexC hp_mt30">
+                    <button type="button" class="el_btnM hp_br5 hp_w100 el_btnPointBord">장바구니</button>
+                    <button type="button" class="el_btnM hp_br5 hp_w100 el_btnPointBack hp_ml10">바로결제</button>
+                </div>
+            </div>
+            <div class="bl_suitBox__info ly_fgrow1 hp_ml50">
+                <table class="bl_suitBox__infoTB">
+                    <thead>
+                    <tr>
+                        <th scope="col" class="hp_alignL">영양성분</th>
+                        <th scope="col" class="hp_alignC">용량</th>
+                        <th scope="col" class="hp_alignR">일일 권장량</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">탄수화물</th>
+                        <td id="absCarbo">0g</td>
+                        <td>4%</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="hp_fs14">당류</th>
+                        <td id="absSugar">0g</td>
+                        <td>4%</td>
+                    </tr>
+                    <tr class="hp_bordTBlack">
+                        <th scope="row">단백질</th>
+                        <td id="absProtein">0g</td>
+                        <td>4%</td>
+                    </tr>
+                    <tr class="hp_bordTBlack">
+                        <th scope="row">지방</th>
+                        <td id="absFat">0g</td>
+                        <td>4%</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="hp_fs14">포화지방</th>
+                        <td id="absSaturatedFat">0g</td>
+                        <td>4%</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="hp_fs14">트랜스지방</th>
+                        <td id="absTransFat">0g</td>
+                        <td>4%</td>
+                    </tr>
+                    <tr class="hp_bordTBlack">
+                        <th scope="row">콜레스테롤</th>
+                        <td id="absCholesterol">0g</td>
+                        <td>4%</td>
+                    </tr>
+                    <tr class="hp_bordTBlack">
+                        <th scope="row">나트륨</th>
+                        <td id="absNatrium">0g</td>
+                        <td>4%</td>
+                    </tr>
+                    <tr class="hp_bordTBlack">
+                        <th scope="row">칼로리</th>
+                        <td id="absCalory">0kcal</td>
+                        <td>4%</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="el_btnM hp_w100 hp_mt30 hp_relative">
+                    <button type="button" class="el_btnM hp_br5 hp_w100 el_btnPointBord el_surveyBtn" th:onclick="|location.href='survey/agree'|">설문 참여하기</button>
+                    <div class="bl_suitBox__balloon">영양 상태 설문을 진행하고 <br/>자신의 일일 권장량과 비교해보세요!</div>
+                </div>
+            </div>
+        </div>
+        <ul class="bl_tab">
+            <li class="bl_tabWrap">
+                <button type="button" class="bl_tabBtn hp_br0 hp_active">상품상세내용</button>
+                <div class="bl_tabCont hp_padding70">
+                    <img src="/user/img/icon/plus.png" alt=""/>
+                </div>
+            </li>
+            <li class="bl_tabWrap">
+                <button type="button" class="bl_tabBtn hp_br0">상품리뷰</button>
+                <div class="bl_tabCont hp_padding70">
+                    <table class="bl_TBsearch">
+                        <caption class="WA">검색</caption>
+                        <colgroup>
+                            <col style="width:200px"/>
+                            <col/>
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row">조회기간 설정</th>
+                            <td class="hp_pt20">
+                                <div class="ly_spaceBetween ly_fitemC">
+                                    <div class="ly_spaceBetween ly_fgrow1">
+                                        <label class="bl_radioBxArea">
+                                            <input class="bl_radioBxArea__input" type="radio" name="searchPeriod" value="" checked>
+                                            <span class="bl_radioBxArea__txt">오늘</span>
+                                        </label>
+                                        <label class="bl_radioBxArea">
+                                            <input class="bl_radioBxArea__input" type="radio" name="searchPeriod" value="">
+                                            <span class="bl_radioBxArea__txt">1주일</span>
+                                        </label>
+                                        <label class="bl_radioBxArea">
+                                            <input class="bl_radioBxArea__input" type="radio" name="searchPeriod" value="">
+                                            <span class="bl_radioBxArea__txt">1개월</span>
+                                        </label>
+                                        <label class="bl_radioBxArea">
+                                            <input class="bl_radioBxArea__input" type="radio" name="searchPeriod" value="">
+                                            <span class="bl_radioBxArea__txt">3개월</span>
+                                        </label>
+                                        <label class="bl_radioBxArea">
+                                            <input class="bl_radioBxArea__input" type="radio" name="searchPeriod" value="">
+                                            <span class="bl_radioBxArea__txt">6개월</span>
+                                        </label>
+                                        <label class="bl_radioBxArea">
+                                            <input class="bl_radioBxArea__input" type="radio" name="searchPeriod" value="">
+                                            <span class="bl_radioBxArea__txt">1년</span>
+                                        </label>
+                                    </div>
+                                    <div class="ly_flex ly_fitemC hp_ml10">
+                                        <label for="" class="hp_w120px"><input type="date" class="hp_w100" name="" value="" title="검색 시작날짜 선택"/></label>
+                                        <span class="hp_ml10 hp_mr10"> ~ </span>
+                                        <label for="" class="hp_w120px"><input type="date" class="hp_w100" name="" value="" title="검색 종료날짜 선택"/></label>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="">카테고리 설정</label></th>
+                            <td class="hp_pb20">
+                                <div class="ly_flex">
+                                    <select class="hp_w120px" name="">
+                                        <option value="">상태 선택</option>
+                                    </select>
+                                    <label for="" class="ly_fgrow1 hp_ml5"><input type="text" class="hp_w100" name="" value="" title="검색어 입력"/></label>
+                                    <label for="" class="hp_ml5 hp_w70px"><input type="button" id="" class="hp_w100 el_btnPointBack" name="" value="검색" title="검색 버튼"/></label>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table class="bl_TBList">
+                        <caption class="WA">검색</caption>
+                        <colgroup>
+                            <col/>
+                            <col style="width:150px"/>
+                            <col style="width:150px"/>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th scope="col">리뷰내용</th>
+                            <th scope="col">회원아이디</th>
+                            <th scope="col">리뷰날짜</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="bl_TBList__ttl">
+                                <div class="container">
+                                    <div class="img-popup">
+                                        <div class="popup-inner">
+                                            <img src="/user/img/icon/minus.png" alt="이미지1">
+                                            <a href="#" class="close-btn"><i class="xi-close"></i><span class="blind">팝업창 닫기</span></a>
+                                        </div>
+                                    </div>
+                                    <div class="item-box">
+                                        <div class="item-img">
+                                            <a href="#"><img src="/user/img/icon/minus.png" alt=""/></a>
+                                            <a href="#"><img src="/user/img/icon/minus.png" alt=""/></a>
+                                            <a href="#"><img src="/user/img/icon/minus.png" alt=""/></a>
+                                            <a href="#"><img src="/user/img/icon/minus.png" alt=""/></a>
+                                            <a href="#"><img src="/user/img/icon/minus.png" alt=""/></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <textarea class="" name="" >너무 맛있어요! 최고입니다.</textarea>
+                            </td>
+                            <td>abcd1234</td>
+                            <td>2024.01.23</td>
+                        </tr>
+                        <tr>
+                            <td class="bl_TBList__ttl">
+                                <textarea class="" name="" >너무 맛있어요! 최고입니다.</textarea>
+                            </td>
+                            <td>abcd1234</td>
+                            <td>2024.01.23</td>
+                        </tr>
+                        <tr>
+                            <td class="bl_TBList__empty" colspan="4">작성된 리뷰가 없습니다.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <ul class="bl_paging hp_mt70">
+                        <li><a class="bl_pagingIcon__prev" href=""><p class="WA">이전 페이지로</p></a></li>
+                        <li><a class="hp_active" href="">1</a></li>
+                        <li><a class="bl_pagingIcon__next" href=""><p class="WA">다음 페이지로</p></a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="bl_tabWrap">
+                <button type="button" class="bl_tabBtn hp_br0">안내정보</button>
+                <div class="bl_tabCont hp_padding70">
+                    <div class="bl_pdView__info">
+                        <dl>
+                            <dt scope="row">배송</dt>
+                            <dd>
+                                ● 배송 시 고객님의 연락 부재 또는 주소 오기입으로 제품 수령이안될 경우 정책상 반송되게 되므로 이로 인한 환불은 소비자 보호에 관한 법률(전자상거래법) 17조 3항에 의해 불가합니다. ※소비자보호에 관한 법률(전자상거래 법) 17조 3항 : 시간이 지나 다시 판매하기 곤란할 정도로 재화의 가치가 현저하게 감소한 경우 소비자는 청약절회를 요청할 수 없다.<br/><br/>
+                                ● 신선 식품 특성상 제주/도서/산간지역은 배송이 원할치 못한 점 양해 부탁드립니다.<br/><br/>
+                                ● 택배사 사정으로 당일 물량 증가로 인해 오후 6시 이후 제품 수령할 수 있다는 부분 참고 부탁드립니다.<br/><br/>
+                                ● 겨울(5℃ 이하 날씨)에 아이스팩을 넣을 경우, 아이스팩과 맞닿은 면이 얼기 때문에 대략 12월 ~ 3월 사이에는 배송 시 아이스팩이 들어가지 않습니다. (12월 ~ 3월 사이 배송 시, 아이스팩 대신 얼린 우엉차가 들어갑니다.)<br/><br/>
+                                ● 새벽 배송 고객의 경우 원칙은 보냉 가방으로 배송되오나, 수거 상황에 따라 은박 보냉백으로 배송 될 수 있습니다. ※종료 예정자는 은박 보냉백으로 배송됩니다.
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt scope="row">환불/취소</dt>
+                            <dd>
+                                ○ 교환/반품은 제품 하자시 실제 수령일부터 전자 상거래법에 의해 7일이내에 가능합니다. (조명에 의한 빛이나 모니터의 색상차이는 제품의 하자가 아닙니다.)<br/><br/>
+                                ○ 주소 불명,연락처 불명,오입력으로 반송된 경우, 왕복택배비용을 고객님께서 지불하셔야 합니다.<br/><br/>
+                                ○ 반품배송비가 구매자 부담인경우 반품배송비 추가결제가 이루어지지 않으면 환불이 지연 될 수있습니다.<br/><br/>
+                                ○ 교환/반품시 지정택배를 이용하지 않을 경우 추가 금액이 발생 할 수 있으니 이에 대한 금액은 고객님께서 부담하셔야 합니다.<br/><br/>
+                                ○ 교환/반품시 최초 포장상태를 유지해주셔야 하며 반품 배송중 파손될 경우, 회수 상품의 상태에 따라 추가도색비나 리패킹비가 발생 할수 있습니다.<br/><br/>
+                                ○ 고객센터로 연락을 주지 않으신 상태에서 임의로 제품을 발송하실 경우, 교환/반품 접수가 되지않고 다시 반송되는 경우가 있으니 꼭! 고객센터로 연락을 먼저 주시기 바랍니다.<br/><br/><br/><br/>
+
+                                ● 단순 변심 또는 개인 사정에 의해 환불을 원하시는 경우 이용분 식단 추가 수령 후 남은 일수에 대하여 환불해드리고 있습니다. 쿠폰 또는 기간 할인은 적용되지 않으며 이용 기간에 따른 쿠폰 적용 불가합니다.<br/><br/><br/><br/>
+
+                                ● 이벤트 상품은 중도 환불 시, 이용기간 + 이벤트 1주분 금액을 제외한 금액이 환불되므로, 꼭 유의하시고 진행바랍니다.
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <th:block th:replace="/user/common/footer.html"></th:block>
+</div>
+</body>
+</html>

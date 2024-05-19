@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <th:block th:replace="/admin/common/head.html"></th:block>
+</head>
+<body class="sb-nav-fixed">
+<th:block th:replace="/admin/common/header.html"></th:block>
+<!-- navbar -->
+<div id="layoutSidenav">
+    <th:block th:replace="/admin/common/sideNav.html"></th:block>
+    <!-- layoutSidenav_nav -->
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">주문 상세보기</h1>
+                <form action="/admin/orderCancel" method="post" onsubmit="cancel(event)">
+                    <input type="hidden" name="orderCode" th:value="${ orderView.orderCode }">
+                    <table class="datatable-table mt-4">
+                        <colgroup>
+                            <col style="width:200px"/>
+                            <col style="width:*%"/>
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row">주문코드</th>
+                            <td colspan="2" th:text="${ orderView.orderCode }"></td>
+
+                            <th scope="row">주문/환불상태</th>
+                            <td colspan="2" th:text="|${ orderView.orderStatus }/${ orderView.refund.refundStatus }|"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">회원이름(아이디)</th>
+                            <td colspan="5" th:text="|${ orderView.member.name }(${ orderView.member.id })|"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">수령인</th>
+                            <td colspan="2">
+                                <span th:if="${orderView.orderRecipient}" th:text="${orderView.orderRecipient}"></span>
+                                <span th:unless="${orderView.orderRecipient}" th:text="${orderView.member.name}"></span>
+                            </td>
+                            <th scope="row">연락처</th>
+                            <td colspan="2">
+                                <span th:if="${ orderView.orderContact }" th:text="${ orderView.orderContact }"></span>
+                                <span th:unless="${ orderView.orderContact }" th:text="${ orderView.member.phone }"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">배송지</th>
+                            <td colspan="5">
+                                <span th:if="${ orderView.orderAddress1 }" th:text="|${orderView.orderAddress1}/${orderView.orderAddress2}/${orderView.orderAddress3}|"></span>
+                                <span th:unless="${ orderView.orderAddress1 }" th:text="|${orderView.member.address1}/${orderView.member.address2}/${orderView.member.address3}|"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">결제금액</th>
+                            <td colspan="2">
+                                <span th:text="${ '￦' + orderView.pay.payPrice }"></span>
+                            </td>
+                            <th scope="row">결제날짜</th>
+                            <td colspan="2" th:text="${ orderView.pay.payDate }"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">결제방법</th>
+                            <td colspan="5" th:text="${ orderView.pay.payMethod }"></td>
+                        </tr>
+                        <tr>
+                            <th colspan="5">주문상세</th>
+                        </tr>
+                        <tr th:each="detail : ${orderView.detail}" th:id="${detail.detailCode}">
+                            <td colspan="5">
+                                <label>
+                                    <input type="checkbox" th:attr="name='selected'" th:value="${detail.detailCode}" th:if="${ detail.detailStatus == 'O'}">
+                                    <span th:text="${detail.detailCode} + '/' + ${detail.product.productName} + '/' + ${detail.detailItemCount} + '개/(' + (${detail.detailItemCount} * ${detail.product.productPrice}) + '원)'"></span>
+                                    <span th:if="${detail.detailStatus == 'X'}"> (주문취소)</span>
+                                </label>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="editBtn" style="text-align: right;">
+                        <button type="submit" class="btn btn-secondary">주문취소</button>
+                        <button type="button" class="btn btn-secondary" onclick="history.back()">목록</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+</div>
+<th:block th:replace="admin/common/foot.html"></th:block>
+<script>
+    function cancel(event) {
+        const selected = document.querySelectorAll('input[name="selected"]:checked')
+        if (selected.length > 0) {
+            const confirmMessage = confirm("주문을 취소하시겠습니까?")
+            if (!confirmMessage) {
+                event.preventDefault()
+            }
+            return confirmMessage;
+        } else {
+            alert("취소할 항목을 선택해 주세요.")
+            event.preventDefault()
+        }
+    }
+</script>
+</body>
+</html>

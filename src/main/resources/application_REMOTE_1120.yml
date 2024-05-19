@@ -1,0 +1,41 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost/dosirak
+    username: dosirak
+    password: dosirak
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: dosirak240414@gmail.com
+    password: nqau ylpu nmly priv
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  # file upload config
+  servlet:
+    multipart:
+      location: C:\dev\semi-project_dosirak\Dosirak
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+mybatis:
+  mapper-locations: mappers/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+# image upload dir
+image:
+  image-dir: src\main\resources\customerUpload\
+
+server:
+  error:
+    include-exception: true
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: always

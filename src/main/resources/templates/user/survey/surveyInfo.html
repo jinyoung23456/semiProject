@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <th:block th:replace="/user/common/head.html"></th:block>
+    <link rel="stylesheet" href="/user/css/survey.css">
+</head>
+
+<body>
+<div class="ly_all bl_all">
+    <th:block th:replace="/user/common/header.html"></th:block>
+    <div class="ly_midWD ly_inner02"> <!-- 답변란 -->
+        <div class="el_lv1Head hp_mb50">설문조사</div>
+        <p class="hp_alignR hp_mt50 hp_blueColor hp_fw700">* 필수입력</p>
+        <div class="hp_bordDE hp_padding50 hp_mt10">
+            <form action="nutrition" method="post">
+            <table class="bl_surveyTB">
+                <colgroup>
+                    <col style="width:120px"/>
+                    <col/>
+                </colgroup>
+                <tbody>
+                <tr>
+                    <th scope="row"><label for="userHeight">키</label><span class="hp_blueColor hp_fw700 hp_fs18">*</span></th>
+                    <td><input name="surveyHeight" type="text" class="el_btnM hp_inputBack hp_w100" id="userHeight" value="" placeholder="키를 입력해주세요." title="키 입력"/></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="userWeight">몸무게</label><span class="hp_blueColor hp_fw700 hp_fs18">*</span></th>
+                    <td><input name="surveyWeight" type="text" class="el_btnM hp_inputBack hp_w100" id="userWeight" value="" placeholder="몸무게를 입력해주세요." title="몸무게 입력"/></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="userBmi">BMI</label></th>
+                    <td><input name="surveyBmi" type="text" class="el_btnM hp_inputBack hp_w100" id="userBmi" value="" placeholder="자신의 BMI를 알고있다면 작성해주세요." title="BMI 입력"/></td>
+                </tr>
+                </tbody>
+            </table>
+            <table class="bl_surveyTB hp_mt50">
+                <colgroup>
+                    <col style="width:120px"/>
+                    <col/>
+                </colgroup>
+                <tbody>
+                <tr>
+                    <th scope="row"><label>관심질병</label></th>
+                    <td>
+                        <div class="ly_spaceBetween">
+                            <label class="bl_checkBx">
+                                <input type="checkbox" class="bl_checkBx__input" name="surveyBlood" value="1">
+                                <span class="bl_checkBx__check"></span>
+                                <span class="hp_ml10">고혈압</span>
+                            </label>
+                            <label class="bl_checkBx hp_ml30">
+                                <input type="checkbox" class="bl_checkBx__input" name="surveyDiabetes" value="1">
+                                <span class="bl_checkBx__check"></span>
+                                <span class="hp_ml10">당뇨</span>
+                            </label>
+                            <label class="bl_checkBx hp_ml30">
+                                <input type="checkbox" class="bl_checkBx__input" name="surveyCancer" value="1">
+                                <span class="bl_checkBx__check"></span>
+                                <span class="hp_ml10">암</span>
+                            </label>
+                            <label class="bl_checkBx hp_ml30">
+                                <input type="checkbox" class="bl_checkBx__input" name="surveyKidney" value="1">
+                                <span class="bl_checkBx__check"></span>
+                                <span class="hp_ml10">신장질환</span>
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+                <th scope="row"><label>희망식단</label></th>
+                <td>
+                    <div class="ly_flex hp_pt10 hp_pb10">
+                        <label class="bl_radioBxArea ly_fgrow1">
+                            <input class="bl_radioBxArea__input" type="radio" name="surveyDiet" value="diet">
+                            <span class="bl_radioBxArea__txt hp_br0">체중감량</span>
+                        </label>
+                        <label class="bl_radioBxArea ly_fgrow1">
+                            <input class="bl_radioBxArea__input" type="radio" name="surveyDiet" value="protein">
+                            <span class="bl_radioBxArea__txt hp_br0">고단백식</span>
+                        </label>
+                        <label class="bl_radioBxArea ly_fgrow1">
+                            <input class="bl_radioBxArea__input" type="radio" name="surveyDiet" value="normal">
+                            <span class="bl_radioBxArea__txt hp_br0">일반식</span>
+                        </label>
+                    </div>
+                </td>
+                </tbody>
+            </table>
+            <button type="submit" class="el_btnM el_btnPointBack hp_w100 hp_br5 hp_mt50">설문 시작하기</button>
+            </form>
+        </div>
+    </div>
+    <th:block th:replace="/user/common/footer.html"></th:block>
+</div>
+</body>
+
+</html>

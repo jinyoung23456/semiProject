@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <th:block th:replace="~{/admin/common/head.html}"></th:block>
+</head>
+<body class="sb-nav-fixed">
+<th:block th:replace="~{/admin/common/header.html}"></th:block>
+<!-- navbar -->
+<div id="layoutSidenav">
+    <th:block th:replace="~{/admin/common/sideNav.html}"></th:block>
+    <!-- layoutSidenav_nav -->
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">상품</h1>
+                <div class="card mb-4 mt-4">
+                    <div class="card-header">
+                        <div class="justify-content-between d-flex align-items-center">
+                            <a class="btn btn-primary" href="/admin/product/nullProductView">상품등록</a>
+                            <div class="text-end">
+                                <label>
+                                    <select id="select1" class="datatable-selector">
+                                        <option value="0">판매상태 조회</option>
+                                        <option value="판매준비중">판매준비중</option>
+                                        <option value="판매중">판매중</option>
+                                        <option value="절판">절판</option>
+                                        <option value="판매중단">판매중단</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    <select id="select2" class="datatable-selector">
+                                        <option value="0">상품분류 조회</option>
+                                        <option value="1">건강도시락</option>
+                                        <option value="2">정성도시락</option>
+                                        <option value="3">간편식</option>
+                                    </select>
+                                </label>
+                                <form class="d-none d-md-inline-block form-inline ms-auto me-0 my-2 my-md-0">
+                                    <div class="input-group">
+                                        <input id="select" class="form-control" type="text" placeholder="Search for..."
+                                               aria-label="Search for..." aria-describedby="btnNavbarSearch"/>
+                                        <button class="btn btn-primary" id="searchButton" type="button">
+                                            <i class="fas fa-search"></i></button>
+                                    </div>
+                                    <script>
+                                        window.onload = function () {
+                                            document.getElementById('searchButton').addEventListener('click', function () {
+                                                const productName = document.getElementById('select').value || null;
+                                                const productCategoryCode = document.getElementById('select2').value || null;
+                                                const productStatus = document.getElementById('select1').value || null;
+
+                                                const params = [];
+
+                                                if (productName !== null) {
+                                                    params.push(`productName=${encodeURIComponent(productName)}`);
+                                                }
+
+                                                if (productCategoryCode !== null) {
+                                                    params.push(`productCategoryCode=${encodeURIComponent(productCategoryCode)}`);
+                                                }
+
+                                                if (productStatus !== null) {
+                                                    params.push(`productStatus=${encodeURIComponent(productStatus)}`);
+                                                }
+
+                                                const url = `/admin/product/search?${params.join('&')}`;
+
+                                                fetch(url, {
+                                                    method: 'GET'
+                                                })
+                                                    .then(response => response.text())
+                                                    .then(html => {
+                                                        const parser = new DOMParser();
+                                                        const doc = parser.parseFromString(html, 'text/html');
+                                                        const searchResultContainer = document.getElementById('searchResultContainer');
+                                                        searchResultContainer.innerHTML = '';
+                                                        searchResultContainer.appendChild(doc.documentElement.querySelector('#searchResultsFragment').content.cloneNode(true));
+                                                    })
+                                                    .catch(error => {
+                                                        console.error('상품 검색 오류:', error);
+                                                    });
+                                            });
+
+                                        }
+                                    </script>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="datatable-table">
+                            <thead>
+                            <tr>
+                                <th>상품코드</th>
+                                <th>상품이름</th>
+                                <th>상품분류</th>
+                                <th>상품가격</th>
+                                <th>판매상태</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="product : ${productList}">
+                                <td th:text="${product.productCode }"></td>
+                                <td th:text="${product.productName}"></td>
+                                <td th:text="${product.productCategoryCode}"></td>
+                                <td th:text="${product.productPrice}"></td>
+                                <td th:text="${product.productStatus}"></td>
+                                <td><a class="edit"
+                                       th:href="@{/admin/product/productView(productCode=${product.productCode})}">수정</a>
+                                </td>
+                                <script th:inline="javascript">
+                                    /*<![CDATA[*/
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        const editButtons = document.querySelectorAll('.edit');
+
+                                        editButtons.forEach(function (button) {
+                                            button.addEventListener('click', function () {
+                                                const productCode = button.getAttribute('data-product-code');
+                                                fetch('/admin/product/productView?productCode=' + productCode, {
+                                                    method: 'POST'
+                                                }).then(function (response) {
+                                                    if (response.ok) {
+                                                        // 성공적으로 처리된 경우
+                                                        window.location.href = '/admin/product/productView?productCode=' + productCode;
+                                                    } else {
+                                                        // 오류가 발생한 경우
+                                                        console.error('오류 발생: ' + response.status);
+                                                    }
+                                                }).catch(function (error) {
+                                                    console.error('네트워크 오류:', error);
+                                                });
+                                            });
+                                        });
+                                    });
+                                    /*]]>*/
+                                </script>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<th:block th:replace="~{/admin/common/foot.html}"></th:block>
+</body>
+</html>

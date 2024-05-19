@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ohgiraffers.dosirak.common.email.model.dao.EmailMapper">
+    <insert id="saveVerificationCode">
+        INSERT INTO VERIFY (VERIFYPAGE, VERIFYCODE, VERIFYTIME)
+        VALUES (#{hiddenCode}, #{verificationCode}, NOW())
+    </insert>
+    <select id="verificationService" resultType="int">
+        SELECT COUNT(*)
+        FROM (SELECT VERIFYPAGE, VERIFYCODE, VERIFYTIME FROM VERIFY ORDER BY VERIFYTIME DESC LIMIT 1) TB
+        WHERE VERIFYPAGE = #{hiddenCode} AND VERIFYCODE = #{inputCode}
+    </select>
+</mapper>
